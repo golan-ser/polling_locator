@@ -79,19 +79,35 @@
                 const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
                 displayResult(nearest);
             } catch (error) {
-                document.getElementById('result').innerHTML = `<p>לא ניתן היה למצוא את הקלפי. נסה שוב.</p>`;
+                document.getElementById('result').innerHTML = `<p>שגיאה: ${error.message}</p>`;
             }
         }
 
         function getCurrentPosition() {
             return new Promise((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject);
+                if (!navigator.geolocation) {
+                    reject(new Error("שירותי מיקום לא זמינים בדפדפן"));
+                } else {
+                    navigator.geolocation.getCurrentPosition(resolve, error => {
+                        reject(new Error("גישה למיקום נדחתה, אנא אפשר הרשאה בדפדפן"));
+                    });
+                }
             });
         }
 
         async function fetchPollingStations() {
-            const response = await fetch('https://raw.githubusercontent.com/golan-ser/polling_locator/main/polling_stations.json');
-            return await response.json();
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/golan-ser/polling_locator/main/polling_stations.json', {
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
+                if (!response.ok) {
+                    throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error("שגיאה בטעינת קובץ הקלפיות:", error);
+                document.getElementById('result').innerHTML = "<p>שגיאה בטעינת נתוני הקלפיות.</p>";
+            }
         }
 
         function findClosestStation(lat, lng, stations) {
@@ -108,13 +124,12 @@
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radius of the Earth in km
+            const R = 6371;
             const dLat = (lat2 - lat1) * (Math.PI / 180);
             const dLon = (lon2 - lon1) * (Math.PI / 180);
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         }
