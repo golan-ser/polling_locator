@@ -131,7 +131,7 @@ function showPosition(position) {
         .then(response => response.text())
         .then(csvData => {
             console.log("✅ נתוני ה-CSV נטענו בהצלחה!");
-            const data =csvToJson(csvData);
+            const data=csvToJson(csvData);
             findClosestPollingStation(position, data);
         })
         .catch(error => {
