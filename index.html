@@ -86,7 +86,6 @@
             console.log("✅ JavaScript נטען בהצלחה!");
             document.getElementById("locationButton").addEventListener("click", getLocation);
         });
-
         function getLocation() {
             if (navigator.geolocation) {
                 console.log("📍 מנסה לאתר את המיקום...");
@@ -96,18 +95,19 @@
                 alert("המכשיר שלך לא תומך בשירותי מיקום");
             }
         }
-
         function showPosition(position) {
-            fetch("https://golan-ser.github.io/polling_locator/polling_stations.csv")
-                .then(response => response.text())
-                .then(csvData => {
-                    const data = csvToJson(csvData);
-                    findClosestPollingStation(position, data);
-                })
-                .catch(error => {
-                    document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
-                });
-        }
+    fetch("https://golan-ser.github.io/polling_locator/polling_stations.csv") // ✅ תיקון הרווחים בכתובת
+        .then(response => response.text())
+        .then(csvData => {
+            console.log("✅ נתוני ה-CSV נטענו בהצלחה!");
+            const data = csvToJson(csvData); // ✅ בדוק שאיות הפונקציה נכון!
+            findClosestPollingStation(position, data);
+        })
+        .catch(error => {
+            console.error("❌ שגיאה בטעינת נתוני הקלפיות:", error);
+            document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
+        });
+}
 
         function getCoordinates(address) {
             return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`)
