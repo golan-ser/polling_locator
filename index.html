@@ -93,6 +93,26 @@
                 .then(response => response.json())
                 .then(data => data.status === "OK" ? data.results[0].geometry.location : null);
         }
+	function showError(error) {
+    let message = "";
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            message = "❌ עליך לאשר גישה למיקום!";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = "❌ לא ניתן לאתר את המיקום שלך.";
+            break;
+        case error.TIMEOUT:
+            message = "❌ לקח יותר מדי זמן לאתר את המיקום.";
+            break;
+        case error.UNKNOWN_ERROR:
+            message = "❌ שגיאה לא ידועה.";
+            break;
+    }
+    console.error("❌ שגיאת מיקום:", message);
+    document.getElementById("result").innerHTML = message;
+}
+
          function getLocation() {
     if (navigator.geolocation) {
         console.log("📍 מנסה לאתר את המיקום...");
