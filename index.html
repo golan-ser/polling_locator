@@ -80,6 +80,37 @@
     </div>
     
     <script>
+        function csvToJson(csv) {
+            const lines = csv.trim().split("\n");
+            const headers = lines[0].split(",");
+            const result = [];
+    
+            for (let i = 1; i < lines.length; i++) {
+                const obj = {};
+                const currentLine = lines[i].split(",");
+    
+                if (currentLine.length === headers.length) {
+                    headers.forEach((header, index) => {
+                        obj[header.trim()] = currentLine[index].trim();
+                    });
+                    result.push(obj);
+                }
+            }
+    
+            console.log("📊 JSON שהומר מ-CSV:", result);
+            return result;
+        }
+    
+        function getLocation() {
+            if (navigator.geolocation) {
+                console.log("📍 מנסה לאתר את המיקום...");
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                console.error("❌ המכשיר שלך לא תומך בשירותי מיקום");
+                alert("המכשיר שלך לא תומך בשירותי מיקום");
+            }
+        }
+    
         function showError(error) {
             let message = "";
             switch (error.code) {
@@ -99,17 +130,7 @@
             alert(message);
             console.error(message);
         }
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                console.log("📍 מנסה לאתר את המיקום...");
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
-            } else {
-                console.error("❌ המכשיר שלך לא תומך בשירותי מיקום");
-                alert("המכשיר שלך לא תומך בשירותי מיקום");
-            }
-        }
-
+    
         document.getElementById("locationButton").addEventListener("click", getLocation);
     </script>
 </body>
