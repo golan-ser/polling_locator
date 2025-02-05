@@ -126,28 +126,29 @@
                     }
                 })
                 .catch(error => {
-                    console.error("שגיאה בטעינת נתוני הקלפיות:", error);
+                    console.error("❌ שגיאה בטעינת נתוני הקלפיות:", error);
                     document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
                 });
         }
 
-        function csvToJson(csv) {
-            const lines = csv.split("\n");
-            const headers = lines[0].split(",");
-            const result = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                const obj = {};
-                const currentLine = lines[i].split(",");
-
-                if (currentLine.length === headers.length) {
-                    headers.forEach((header, index) => {
-                        obj[header.trim()] = currentLine[index].trim();
-                    });
-                    result.push(obj);
-                }
+        function showError(error) {
+            let message = "";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    message = "❌ עליך לאשר גישה למיקום!";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "❌ לא ניתן לאתר את המיקום שלך.";
+                    break;
+                case error.TIMEOUT:
+                    message = "❌ חיבור למיקום נכשל.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    message = "❌ שגיאה לא ידועה.";
+                    break;
             }
-            return result;
+            alert(message);
+            console.error(message);
         }
     </script>
 </body>
