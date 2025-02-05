@@ -19,7 +19,7 @@
     
     <style>
         body {
-            background: url('shimon.jpg') no-repeat center center fixed;
+            background: url('background.jpg') no-repeat center center fixed;
             background-size: cover;
             color: white;
             font-family: 'Assistant', sans-serif;
@@ -37,7 +37,7 @@
             box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
         }
         h1 {
             font-size: 2.5em;
@@ -67,7 +67,7 @@
         }
         .candidate-img {
             width: 100%;
-            max-width: 250px;
+            max-width: 300px;
             border-radius: 15px;
             margin-top: 20px;
             display: block;
@@ -90,7 +90,7 @@
         <h1>חיפוש קלפי קרובה</h1>
         <img src="shimon.jpg" alt="שמעון גואטה" class="candidate-img">
         <button id="locationButton">מצא קלפי קרובה</button>
-        <p id="result"></p>
+        <div id="result"></div>
     </div>
     
     <script>
@@ -108,42 +108,42 @@
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             
-            fetch(`https://api.example.com/find-nearest?lat=${lat}&lon=${lon}`)
+            fetch('polling_stations.json')
                 .then(response => response.json())
                 .then(data => {
-                    const pollingStation = data.name + ', ' + data.address;
-                    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
-                    const wazeUrl = `https://waze.com/ul?ll=${lat},${lon}&navigate=yes`;
-                    
-                    document.getElementById("result").innerHTML = `
-                        <p>הקלפי הקרובה ביותר: ${pollingStation}</p>
-                        <a href="${googleMapsUrl}" target="_blank" class="btn btn-success">פתח ב-Google Maps</a>
-                        <a href="${wazeUrl}" target="_blank" class="btn btn-primary">פתח ב-Waze</a>
-                    `;
+                    let closestStation = null;
+                    let minDistance = Infinity;
+
+                    data.forEach(station => {
+                        const distance = Math.sqrt(Math.pow(station.lat - lat, 2) + Math.pow(station.lon - lon, 2));
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestStation = station;
+                        }
+                    });
+
+                    if (closestStation) {
+                        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${closestStation.lat},${closestStation.lon}`;
+                        const wazeUrl = `https://waze.com/ul?ll=${closestStation.lat},${closestStation.lon}&navigate=yes`;
+                        
+                        document.getElementById("result").innerHTML = `
+                            <p>הקלפי הקרובה ביותר: ${closestStation.name}, ${closestStation.address}</p>
+                            <table class="table table-striped text-white">
+                                <tr><th>שם קלפי</th><td>${closestStation.name}</td></tr>
+                                <tr><th>כתובת</th><td>${closestStation.address}</td></tr>
+                                <tr><th>מיקום</th><td>${closestStation.lat}, ${closestStation.lon}</td></tr>
+                            </table>
+                            <a href="${googleMapsUrl}" target="_blank" class="btn btn-success">פתח ב-Google Maps</a>
+                            <a href="${wazeUrl}" target="_blank" class="btn btn-primary">פתח ב-Waze</a>
+                        `;
+                    } else {
+                        document.getElementById("result").innerHTML = "לא נמצאה קלפי קרובה.";
+                    }
                 })
                 .catch(error => {
                     console.error("Error fetching polling station data:", error);
-                    document.getElementById("result").innerHTML = "שגיאה באיתור הקלפי הקרובה.";
+                    document.getElementById("result").innerHTML = "שגיאה בטעינת נתוני הקלפיות.";
                 });
-        }
-
-        function showError(error) {
-            let message = "";
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    message = "יש לאפשר גישה למיקום כדי למצוא את הקלפי הקרובה.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    message = "לא ניתן לאתר את המיקום שלך.";
-                    break;
-                case error.TIMEOUT:
-                    message = "זמן הבקשה לאיתור מיקום נגמר.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    message = "שגיאה בלתי ידועה.";
-                    break;
-            }
-            alert(message);
         }
     </script>
 </body>
