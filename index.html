@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>חיפוש קלפי</title>
+    <title>חיפוש קלפי קרובה</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;700&display=swap" rel="stylesheet">
@@ -14,7 +14,6 @@
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     
-    <!-- GSAP for animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
     <style>
@@ -37,13 +36,18 @@
             box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
         }
         h1 {
             font-size: 2.5em;
             font-weight: bold;
             margin-bottom: 20px;
-            animation: fadeInDown 1s;
+        }
+        .candidate-img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin-top: 20px;
         }
         button {
             padding: 15px 25px;
@@ -65,28 +69,62 @@
             font-size: 1.2em;
             margin-top: 20px;
         }
-        .candidate-img {
-            width: 100%;
-            max-width: 250px;
-            border-radius: 15px;
-            margin-top: 20px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
     </style>
 </head>
 <body>
-    <div class="container animate_animated animate_fadeIn">
+    <div class="container animate__animated animate__fadeIn">
         <h1>חיפוש קלפי קרובה</h1>
-        <img src="background.jpg" alt="שמעון גואטה" class="candidate-img">
-        <button id="animateBtn">מצא קלפי קרובה</button>
-        <p id="result"></p>
+        <img src="shimon.jpg" alt="שמעון גואטה" class="candidate-img">
+        <button id="locationButton">מצא קלפי קרובה</button>
+        <div id="result"></div>
     </div>
+    
     <script>
-        document.getElementById("animateBtn").addEventListener("click", function() {
-            gsap.to("#animateBtn", { scale: 1.2, duration: 0.2, yoyo: true, repeat: 1 });
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("✅ JavaScript נטען בהצלחה!");
+            document.getElementById("locationButton").addEventListener("click", getLocation);
         });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                console.log("📍 מנסה לאתר את המיקום...");
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                console.error("❌ המכשיר שלך לא תומך בשירותי מיקום");
+                alert("המכשיר שלך לא תומך בשירותי מיקום");
+            }
+        }
+
+        function showError(error) {
+            let message = "";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    message = "❌ עליך לאשר גישה למיקום!";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "❌ לא ניתן לאתר את המיקום שלך.";
+                    break;
+                case error.TIMEOUT:
+                    message = "❌ לקח יותר מדי זמן לאתר את המיקום.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    message = "❌ שגיאה לא ידועה.";
+                    break;
+            }
+            console.error("❌ שגיאת מיקום:", message);
+            document.getElementById("result").innerHTML = message;
+        }
+
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
     </script>
 </body>
 </html>
