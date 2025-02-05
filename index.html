@@ -80,57 +80,6 @@
     </div>
     
     <script>
-        document.getElementById("locationButton").addEventListener("click", getLocation);
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
-            } else {
-                alert("המכשיר שלך לא תומך בשירותי מיקום");
-            }
-        }
-
-        function showPosition(position) {
-            const userLat = position.coords.latitude;
-            const userLon = position.coords.longitude;
-
-            fetch('polling_stations.csv')
-                .then(response => response.text())
-                .then(csvData => {
-                    const data = csvToJson(csvData);
-                    let closestStation = null;
-                    let minDistance = Infinity;
-
-                    data.forEach(station => {
-                        const stationLat = parseFloat(station.lat);
-                        const stationLon = parseFloat(station.lon);
-                        const distance = getDistance(userLat, userLon, stationLat, stationLon);
-
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            closestStation = station;
-                        }
-                    });
-
-                    if (closestStation) {
-                        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${closestStation.lat},${closestStation.lon}`;
-                        const wazeUrl = `https://waze.com/ul?ll=${closestStation.lat},${closestStation.lon}&navigate=yes`;
-
-                        document.getElementById("result").innerHTML = `
-                            <p>📍 הקלפי הקרובה ביותר: <strong>${closestStation.name}, ${closestStation.address}</strong></p>
-                            <a href="${googleMapsUrl}" target="_blank" class="btn btn-success">🔗 פתח ב-Google Maps</a>
-                            <a href="${wazeUrl}" target="_blank" class="btn btn-primary">🔗 פתח ב-Waze</a>
-                        `;
-                    } else {
-                        document.getElementById("result").innerHTML = "❌ לא נמצאה קלפי קרובה.";
-                    }
-                })
-                .catch(error => {
-                    console.error("❌ שגיאה בטעינת נתוני הקלפיות:", error);
-                    document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
-                });
-        }
-
         function showError(error) {
             let message = "";
             switch (error.code) {
@@ -150,6 +99,18 @@
             alert(message);
             console.error(message);
         }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                console.log("📍 מנסה לאתר את המיקום...");
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                console.error("❌ המכשיר שלך לא תומך בשירותי מיקום");
+                alert("המכשיר שלך לא תומך בשירותי מיקום");
+            }
+        }
+
+        document.getElementById("locationButton").addEventListener("click", getLocation);
     </script>
 </body>
 </html>
