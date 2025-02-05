@@ -43,6 +43,12 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
+        .candidate-img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
         button {
             padding: 15px 25px;
             font-size: 18px;
@@ -68,6 +74,7 @@
 <body>
     <div class="container animate__animated animate__fadeIn">
         <h1>חיפוש קלפי קרובה</h1>
+        <img src="shimon.jpg" alt="שמעון גואטה" class="candidate-img">
         <button id="locationButton">מצא קלפי קרובה</button>
         <div id="result"></div>
     </div>
@@ -87,9 +94,10 @@
             const userLat = position.coords.latitude;
             const userLon = position.coords.longitude;
 
-            fetch('polling_stations.json')
-                .then(response => response.json())
-                .then(data => {
+            fetch('polling_stations.csv')
+                .then(response => response.text())
+                .then(csvData => {
+                    const data = csvToJson(csvData);
                     let closestStation = null;
                     let minDistance = Infinity;
 
@@ -123,16 +131,23 @@
                 });
         }
 
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
+        function csvToJson(csv) {
+            const lines = csv.split("\n");
+            const headers = lines[0].split(",");
+            const result = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const obj = {};
+                const currentLine = lines[i].split(",");
+
+                if (currentLine.length === headers.length) {
+                    headers.forEach((header, index) => {
+                        obj[header.trim()] = currentLine[index].trim();
+                    });
+                    result.push(obj);
+                }
+            }
+            return result;
         }
     </script>
 </body>
