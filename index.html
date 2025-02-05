@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>חיפוש קלפי קרובה</title>
-
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;700&display=swap" rel="stylesheet">
-
+    
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
+    
     <style>
         body {
             background: url('background.jpg') no-repeat center center fixed;
@@ -78,7 +78,7 @@
         <button id="locationButton">מצא קלפי קרובה</button>
         <div id="result"></div>
     </div>
-
+    
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             console.log("✅ JavaScript נטען בהצלחה!");
@@ -119,7 +119,6 @@
             for (let i = 1; i < lines.length; i++) {
                 const obj = {};
                 const currentLine = lines[i].split(",");
-
                 if (currentLine.length === headers.length) {
                     headers.forEach((header, index) => {
                         obj[header.trim()] = currentLine[index].trim();
@@ -127,8 +126,6 @@
                     result.push(obj);
                 }
             }
-
-            console.log("📊 JSON שהומר מ-CSV:", result);
             return result;
         }
 
@@ -140,7 +137,6 @@
                 const stationLat = parseFloat(station.lat);
                 const stationLon = parseFloat(station.lon);
                 const distance = getDistance(position.coords.latitude, position.coords.longitude, stationLat, stationLon);
-
                 if (distance < minDistance) {
                     minDistance = distance;
                     closestStation = station;
@@ -152,15 +148,6 @@
             } else {
                 document.getElementById("result").innerHTML = "❌ לא נמצאה קלפי קרובה.";
             }
-        }
-
-        function showError(error) {
-            console.error("❌ שגיאה בקבלת מיקום:", error);
-            alert("❌ לא ניתן לאתר את המיקום שלך.");
-        }
-
-        function getDistance(lat1, lon1, lat2, lon2) {
-            return Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2));
         }
     </script>
 </body>
