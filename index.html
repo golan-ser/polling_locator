@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מציאת קלפי במעלה יוסף</title>
+    <title>מציאת קלפי לבחירות במעלה יוסף</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -13,7 +13,7 @@
             background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/background.jpg') no-repeat center center fixed; background-size: cover; filter: brightness(0.8); background-size: cover;
             background-size: cover;
         }
-        .container { background: rgba(0, 0, 0, 0.8); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 1.5s ease-in-out; text-align: center; color: white; width: 90%; max-width: 500px; background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out; background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/Shimon.jpg') no-repeat center center fixed; background-size: cover; background-size: cover; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out;
+        .container { background: rgba(0, 0, 0, 0.8); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 1.5s ease-in-out; text-align: center; color: white; width: 90%; max-width: 500px; background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out; background: url('https://golan-ser.github.io/polling_locator/shimon.jpg') no-repeat center center fixed; background-size: cover; background-size: cover; background-size: cover; background-size: cover; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -32,7 +32,7 @@
         .campaign-banner { width: 100%; height: auto; max-width: 400px; margin: auto; display: block; border-radius: 10px;
             width: 100%;
             height: 200px;
-            background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/Shimon.jpg') no-repeat center center fixed; background-size: cover;
+            background: url('https://golan-ser.github.io/polling_locator/shimon.jpg') no-repeat center center fixed; background-size: cover; background-size: cover;
             background-size: cover;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -68,7 +68,7 @@
         <div class="campaign-banner"></div>
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
         <button onclick="findNearestPollingStation()">מצא קלפי קרובה</button>
-        <div id="result"></div>
+        <div id="result"><p>הקלפי הקרובה ביותר אליך היא:</p></div>
     </div>
 
     <script>
