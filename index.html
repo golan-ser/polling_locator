@@ -1,98 +1,139 @@
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חיפוש קלפי קרובה</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <style>
+        body {
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: 'Assistant', sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #ffcc00, #ffaa00);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+        }
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 4px 15px rgba(255, 204, 0, 0.5);
+        }
+        #result {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn">
+        <h1>חיפוש קלפי קרובה</h1>
+        <button id="locationButton">מצא קלפי קרובה</button>
+        <div id="result"></div>
+    </div>
+    
+    <script>
         document.getElementById("locationButton").addEventListener("click", getLocation);
-    });
 
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            alert("המכשיר שלך לא תומך בשירותי מיקום");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("המכשיר שלך לא תומך בשירותי מיקום");
+            }
         }
-    }
 
-    function showPosition(position) {
-        const userLat = position.coords.latitude;
-        const userLon = position.coords.longitude;
-        console.log(`✅ מיקום נלקח בהצלחה: LAT=${userLat}, LON=${userLon}`);
+        function showPosition(position) {
+            const userLat = position.coords.latitude;
+            const userLon = position.coords.longitude;
 
-        fetch('polling_stations.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("שגיאה בטעינת הקובץ polling_stations.json");
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data || data.length === 0) {
-                    throw new Error("אין נתונים זמינים בקובץ JSON");
-                }
+            fetch('polling_stations.json')
+                .then(response => response.json())
+                .then(data => {
+                    let closestStation = null;
+                    let minDistance = Infinity;
 
-                let closestStation = null;
-                let minDistance = Infinity;
+                    data.forEach(station => {
+                        const stationLat = parseFloat(station.lat);
+                        const stationLon = parseFloat(station.lon);
+                        const distance = getDistance(userLat, userLon, stationLat, stationLon);
 
-                data.forEach(station => {
-                    const stationLat = parseFloat(station.lat);
-                    const stationLon = parseFloat(station.lon);
-                    const distance = getDistance(userLat, userLon, stationLat, stationLon);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestStation = station;
+                        }
+                    });
 
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestStation = station;
+                    if (closestStation) {
+                        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${closestStation.lat},${closestStation.lon}`;
+                        const wazeUrl = `https://waze.com/ul?ll=${closestStation.lat},${closestStation.lon}&navigate=yes`;
+
+                        document.getElementById("result").innerHTML = `
+                            <p>📍 הקלפי הקרובה ביותר: <strong>${closestStation.name}, ${closestStation.address}</strong></p>
+                            <a href="${googleMapsUrl}" target="_blank" class="btn btn-success">🔗 פתח ב-Google Maps</a>
+                            <a href="${wazeUrl}" target="_blank" class="btn btn-primary">🔗 פתח ב-Waze</a>
+                        `;
+                    } else {
+                        document.getElementById("result").innerHTML = "❌ לא נמצאה קלפי קרובה.";
                     }
+                })
+                .catch(error => {
+                    console.error("שגיאה בטעינת נתוני הקלפיות:", error);
+                    document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
                 });
-
-                if (closestStation) {
-                    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${closestStation.lat},${closestStation.lon}`;
-                    const wazeUrl = `https://waze.com/ul?ll=${closestStation.lat},${closestStation.lon}&navigate=yes`;
-
-                    document.getElementById("result").innerHTML = `
-                        <p>📍 הקלפי הקרובה ביותר: <strong>${closestStation.name}, ${closestStation.address}</strong></p>
-                        <table class="table table-dark table-striped">
-                            <tr><th>שם קלפי</th><td>${closestStation.name}</td></tr>
-                            <tr><th>כתובת</th><td>${closestStation.address}</td></tr>
-                        </table>
-                        <a href="${googleMapsUrl}" target="_blank" class="btn btn-success">🔗 פתח ב-Google Maps</a>
-                        <a href="${wazeUrl}" target="_blank" class="btn btn-primary">🔗 פתח ב-Waze</a>
-                    `;
-                } else {
-                    document.getElementById("result").innerHTML = "❌ לא נמצאה קלפי קרובה.";
-                }
-            })
-            .catch(error => {
-                console.error("❌ שגיאה בטיפול בנתוני JSON:", error);
-                document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
-            });
-    }
-
-    function showError(error) {
-        let message = "";
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                message = "יש לאפשר גישה למיקום כדי למצוא את הקלפי הקרובה.";
-                break;
-            case error.POSITION_UNAVAILABLE:
-                message = "לא ניתן לאתר את המיקום שלך.";
-                break;
-            case error.TIMEOUT:
-                message = "זמן הבקשה לאיתור מיקום נגמר.";
-                break;
-            case error.UNKNOWN_ERROR:
-                message = "שגיאה בלתי ידועה.";
-                break;
         }
-        alert(message);
-    }
 
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    }
-</script>
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+    </script>
+</body>
+</html>
