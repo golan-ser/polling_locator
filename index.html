@@ -139,35 +139,41 @@ function showPosition(position) {
             document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
         });
 }
+function findClosestPollingStation(position, data) {
+    let closestStation = null;
+    let minDistance = Infinity;
 
-        async function findClosestPollingStation(position, data) {
-            let closestStation = null;
-            let minDistance = Infinity;
-
-            for (const station of data) {
-                const address = `${station["שם הרשות"]}, ${station["כתובת הקלפי"]}`;
-                const coords = await getCoordinates(address);
-                if (coords) {
-                    const distance = getDistance(position.coords.latitude, position.coords.longitude, coords.lat, coords.lon);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestStation = { ...station, lat: coords.lat, lon: coords.lon };
-                    }
-                }
-            }
-            document.getElementById("result").innerHTML = closestStation 
-                ? `📍 הקלפי הקרובה ביותר: ${closestStation["שם הרשות"]}, ${closestStation["כתובת הקלפי"]}`
-                : "❌ לא נמצאה קלפי קרובה.";
+    data.forEach(station => {
+        const distance = getDistance(position.coords.latitude, position.coords.longitude, station.lat, station.lon);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestStation = station;
         }
+    });
 
-        function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
+    if (closestStation) {
+        document.getElementById("result").innerHTML = `
+            📍 הקלפי הקרובה ביותר: <strong>${closestStation.city}, ${closestStation.address}</strong><br>
+            <a href="https://www.google.com/maps/search/?api=1&query=${closestStation.lat},${closestStation.lon}" target="_blank" class="btn btn-success">📍 פתח ב-Google Maps</a>
+            <a href="https://www.waze.com/ul?ll=${closestStation.lat},${closestStation.lon}&navigate=yes" target="_blank" class="btn btn-primary">📍 פתח ב-Waze</a>
+        `;
+    } else {
+        document.getElementById("result").innerHTML = "❌ לא נמצאה קלפי קרובה.";
+    }
+}
+
         }
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // רדיוס כדור הארץ בק"מ
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // המרחק בק"מ
+}
+
     </script>
 </body>
 </html>
