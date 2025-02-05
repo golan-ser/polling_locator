@@ -122,16 +122,13 @@
         alert("המכשיר שלך לא תומך בשירותי מיקום");
     }
 }
-
-// ✅ ודא שהפונקציה `showPosition()` מופיעה לפני הקריאה אליה
-function showPosition(position) {
+// ✅ ודא שהפונקציה `showPosition()` מופיעה לפני הקריאה אליהfunction showPosition(position) {
     console.log(`✅ מיקום נמצא: LAT=${position.coords.latitude}, LON=${position.coords.longitude}`);
 
-    fetch("https://golan-ser.github.io/polling_locator/polling_stations.csv")
-        .then(response => response.text())
-        .then(csvData => {
-            console.log("✅ נתוני ה-CSV נטענו בהצלחה!");
-            const data=csvToJson(csvData);
+    fetch("https://golan-ser.github.io/polling_locator/polling_stations.json") // ✅ טעינת JSON
+        .then(response => response.json()) // ✅ המרה אוטומטית ל-JSON
+        .then(data => {
+            console.log("✅ נתוני ה-JSON נטענו בהצלחה!", data);
             findClosestPollingStation(position, data);
         })
         .catch(error => {
