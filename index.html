@@ -97,7 +97,7 @@
 
         async function fetchPollingStations() {
             try {
-                const response = await fetch('https://golan-ser.github.io/polling_locator/polling_stations.json', {
+                const response = await fetch('https://golan-ser.github.io/polling_locator/polling_stations_with_coordinates.json', {
                     headers: { 'Cache-Control': 'no-cache' }
                 });
                 if (!response.ok) {
