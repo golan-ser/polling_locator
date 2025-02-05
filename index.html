@@ -94,80 +94,36 @@
                 alert("המכשיר שלך לא תומך בשירותי מיקום");
             }
         }
-		function showError(error) {
-    let message = "";
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            message = "❌ עליך לאשר גישה למיקום!";
-            break;
-        case error.POSITION_UNAVAILABLE:
-            message = "❌ לא ניתן לאתר את המיקום שלך.";
-            break;
-        case error.TIMEOUT:
-            message = "❌ לקח יותר מדי זמן לאתר את המיקום.";
-            break;
-        case error.UNKNOWN_ERROR:
-            message = "❌ שגיאה לא ידועה.";
-            break;
-    }
-    console.error("❌ שגיאת מיקום:", message);
-    document.getElementById("result").innerHTML = message;
-}
 
-
-        function showPosition(position) {
-            console.log(`✅ מיקום נמצא: LAT=${position.coords.latitude}, LON=${position.coords.longitude}`);
-
-            fetch("https://golan-ser.github.io/polling_locator/polling_stations.csv")
-                .then(response => response.text())
-                .then(csvData => {
-                    console.log("✅ נתוני ה-CSV נטענו בהצלחה!");
-                    const data = csvToJson(csvData);
-                    findClosestPollingStation(position, data);
-                })
-                .catch(error => {
-                    console.error("❌ שגיאה בטעינת נתוני הקלפיות:", error);
-                    document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
-                });
+        function showError(error) {
+            let message = "";
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    message = "❌ עליך לאשר גישה למיקום!";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "❌ לא ניתן לאתר את המיקום שלך.";
+                    break;
+                case error.TIMEOUT:
+                    message = "❌ לקח יותר מדי זמן לאתר את המיקום.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    message = "❌ שגיאה לא ידועה.";
+                    break;
+            }
+            console.error("❌ שגיאת מיקום:", message);
+            document.getElementById("result").innerHTML = message;
         }
 
-        function csvToJson(csv) {
-            const lines = csv.trim().split("\n");
-            const headers = lines[0].split(",");
-            const result = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                const obj = {};
-                const currentLine = lines[i].split(",");
-                if (currentLine.length === headers.length) {
-                    headers.forEach((header, index) => {
-                        obj[header.trim()] = currentLine[index].trim();
-                    });
-                    result.push(obj);
-                }
-            }
-            return result;
-        }
-
-        function findClosestPollingStation(position, data) {
-            let closestStation = null;
-            let minDistance = Infinity;
-
-            data.forEach(station => {
-                const stationLat = parseFloat(station.lat);
-                const stationLon = parseFloat(station.lon);
-                const distance = getDistance(position.coords.latitude, position.coords.longitude, stationLat, stationLon);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestStation = station;
-                }
-            });
-
-            if (closestStation) {
-                document.getElementById("result").innerHTML = `📍 הקלפי הקרובה ביותר: <strong>${closestStation.name}, ${closestStation.address}</strong>`;
-            } else {
-                document.getElementById("result").innerHTML = "❌ לא נמצאה קלפי קרובה.";
-            }
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
         }
     </script>
 </body>
