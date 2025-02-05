@@ -80,6 +80,8 @@
     </div>
     
     <script>
+        const GOOGLE_API_KEY = "YOUR_GOOGLE_API_KEY";
+
         document.addEventListener("DOMContentLoaded", function() {
             console.log("✅ JavaScript נטען בהצלחה!");
             document.getElementById("locationButton").addEventListener("click", getLocation);
@@ -95,33 +97,49 @@
             }
         }
 
-        function showError(error) {
-            let message = "";
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    message = "❌ עליך לאשר גישה למיקום!";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    message = "❌ לא ניתן לאתר את המיקום שלך.";
-                    break;
-                case error.TIMEOUT:
-                    message = "❌ לקח יותר מדי זמן לאתר את המיקום.";
-                    break;
-                case error.UNKNOWN_ERROR:
-                    message = "❌ שגיאה לא ידועה.";
-                    break;
+        function showPosition(position) {
+            fetch("https://golan-ser.github.io/polling_locator/polling_stations.csv")
+                .then(response => response.text())
+                .then(csvData => {
+                    const data = csvToJson(csvData);
+                    findClosestPollingStation(position, data);
+                })
+                .catch(error => {
+                    document.getElementById("result").innerHTML = "❌ שגיאה בטעינת נתוני הקלפיות.";
+                });
+        }
+
+        function getCoordinates(address) {
+            return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_API_KEY}`)
+                .then(response => response.json())
+                .then(data => data.status === "OK" ? data.results[0].geometry.location : null);
+        }
+
+        async function findClosestPollingStation(position, data) {
+            let closestStation = null;
+            let minDistance = Infinity;
+
+            for (const station of data) {
+                const address = `${station["שם הרשות"]}, ${station["כתובת הקלפי"]}`;
+                const coords = await getCoordinates(address);
+                if (coords) {
+                    const distance = getDistance(position.coords.latitude, position.coords.longitude, coords.lat, coords.lon);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestStation = { ...station, lat: coords.lat, lon: coords.lon };
+                    }
+                }
             }
-            console.error("❌ שגיאת מיקום:", message);
-            document.getElementById("result").innerHTML = message;
+            document.getElementById("result").innerHTML = closestStation 
+                ? `📍 הקלפי הקרובה ביותר: ${closestStation["שם הרשות"]}, ${closestStation["כתובת הקלפי"]}`
+                : "❌ לא נמצאה קלפי קרובה.";
         }
 
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371;
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         }
