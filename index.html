@@ -3,71 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מציאת קלפי במעלה יוסף</title>
+    <title>חיפוש קלפי קרובה</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS עיצוב -->
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/background.jpg') no-repeat center center fixed; background-size: cover; filter: brightness(0.8); background-size: cover;
+            background: url('background.jpg') no-repeat center center fixed;
             background-size: cover;
-        }
-        .container { background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out; background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/Shimon.jpg') no-repeat center center fixed; background-size: cover; background-size: cover; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out;
+            color: white;
+            font-family: 'Assistant', sans-serif;
+            text-align: center;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            width: 80%;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            width: 90%;
             max-width: 600px;
-            margin: 50px auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            font-size: 2rem;
-            color: #004d40;
-        }
-        .campaign-banner {
-            width: 100%;
-            height: 200px;
-            background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/Shimon.jpg') no-repeat center center fixed; background-size: cover;
-            background-size: cover;
-            border-radius: 8px;
+            font-size: 2.5em;
+            font-weight: bold;
             margin-bottom: 20px;
         }
+        .candidate-img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
         button {
-            padding: 12px 18px;
-            font-size: 1rem;
-            margin: 10px;
+            padding: 15px 25px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #ffcc00, #ffaa00);
+            color: white;
             border: none;
-            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
         }
-        .google-btn {
-            background-color: #4285F4;
-            color: white;
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 4px 15px rgba(255, 204, 0, 0.5);
         }
-        .google-btn:hover {
-            background-color: #357ae8;
-        }
-        .waze-btn {
-            background-color: #00bcd4;
-            color: white;
-        }
-        .waze-btn:hover {
-            background-color: #0097a7;
+        #result {
+            font-size: 1.2em;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>מציאת קלפי קרובה במועצת מעלה יוסף</h1>
-        <div class="campaign-banner"></div>
-        <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        <button onclick="findNearestPollingStation()">מצא קלפי קרובה</button>
+        <h1>חיפוש קלפי קרובה</h1>
+        <img src="shimon.jpg" alt="שמעון גואטה" class="candidate-img">
+        <button id="locationButton">מצא קלפי קרובה</button>
         <div id="result"></div>
     </div>
 
