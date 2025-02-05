@@ -3,131 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מציאת קלפי</title>
+    <title>מציאת קלפי במעלה יוסף</title>
     <style>
         body {
-            font-family: 'Arial, Helvetica, sans-serif';
-            background-image: url('background.jpg');
-            background-size: cover;
-            background-position: center;
-            color: #ffffff;
-            text-align: center;
-            padding: 0;
+            font-family: 'Arial', sans-serif;
             margin: 0;
+            padding: 0;
+            color: #333;
+            background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/background.jpg') no-repeat center center fixed;
+            background-size: cover;
         }
         .container {
-            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            width: 80%;
             max-width: 600px;
             margin: 50px auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         h1 {
-            font-size: 2.5em;
+            font-size: 2rem;
+            color: #004d40;
+        }
+        .campaign-banner {
+            width: 100%;
+            height: 200px;
+            background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/Shimon.jpg') no-repeat center center;
+            background-size: cover;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
-        .campaign-img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
+        button {
+            padding: 12px 18px;
+            font-size: 1rem;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        .result {
-            font-size: 1.5em;
-            margin: 20px 0;
-        }
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .buttons a {
-            background-color: #ff7b00;
+        .google-btn {
+            background-color: #4285F4;
             color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            transition: background-color 0.3s;
         }
-        .buttons a:hover {
-            background-color: #ff5200;
+        .google-btn:hover {
+            background-color: #357ae8;
+        }
+        .waze-btn {
+            background-color: #00bcd4;
+            color: white;
+        }
+        .waze-btn:hover {
+            background-color: #0097a7;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>מצא את הקלפי הקרובה ביותר</h1>
-        <img src="Shimon.jpg" alt="תמונת קמפיין" class="campaign-img">
-        <div class="result" id="result">מבקש את המיקום שלך...</div>
-        <div class="buttons" id="navigation-buttons" style="display: none;">
-            <a href="#" id="google-maps-link" target="_blank">ניווט עם Google Maps</a>
-            <a href="#" id="waze-link" target="_blank">ניווט עם Waze</a>
-        </div>
+        <h1>מציאת קלפי קרובה במועצת מעלה יוסף</h1>
+        <div class="campaign-banner"></div>
+        <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
+        <button onclick="findNearestPollingStation()">מצא קלפי קרובה</button>
+        <div id="result"></div>
     </div>
 
     <script>
-        // Fetch polling stations data from JSON
-        async function fetchPollingStations() {
-            const response = await fetch('polling_stations.json');
-            const data = await response.json();
-            return data;
-        }
-
-        // Calculate distance between two coordinates using Haversine formula
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Earth's radius in km
-            const dLat = (lat2 - lat1) * (Math.PI / 180);
-            const dLon = (lon2 - lon1) * (Math.PI / 180);
-            const a = 
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) + 
-                Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c; // Distance in km
-        }
-
-        // Request user's location and find the nearest polling station
         async function findNearestPollingStation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (position) => {
-                    const userLat = position.coords.latitude;
-                    const userLon = position.coords.longitude;
-
-                    const pollingStations = await fetchPollingStations();
-                    let nearestStation = null;
-                    let shortestDistance = Infinity;
-
-                    pollingStations.forEach(station => {
-                        const distance = calculateDistance(userLat, userLon, station.latitude, station.longitude);
-                        if (distance < shortestDistance) {
-                            shortestDistance = distance;
-                            nearestStation = station;
-                        }
-                    });
-
-                    if (nearestStation) {
-                        document.getElementById('result').innerText = `הקלפי הקרובה ביותר אליך היא: ${nearestStation.name}`;
-
-                        // Set navigation links
-                        const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${nearestStation.latitude},${nearestStation.longitude}`;
-                        const wazeLink = `https://waze.com/ul?ll=${nearestStation.latitude},${nearestStation.longitude}&navigate=yes`;
-
-                        document.getElementById('google-maps-link').href = googleMapsLink;
-                        document.getElementById('waze-link').href = wazeLink;
-                        document.getElementById('navigation-buttons').style.display = 'flex';
-                    } else {
-                        document.getElementById('result').innerText = 'לא נמצאה קלפי קרובה.';
-                    }
-                }, () => {
-                    document.getElementById('result').innerText = 'לא ניתן לקבל את המיקום שלך.';
-                });
-            } else {
-                document.getElementById('result').innerText = 'המכשיר שלך לא תומך בשירותי מיקום.';
+            try {
+                const position = await getCurrentPosition();
+                const pollingStations = await fetchPollingStations();
+                const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
+                displayResult(nearest);
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p>לא ניתן היה למצוא את הקלפי. נסה שוב.</p>`;
             }
         }
 
-        // Initiate the location request on page load
-        findNearestPollingStation();
+        function getCurrentPosition() {
+            return new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+        }
+
+        async function fetchPollingStations() {
+            const response = await fetch('https://raw.githubusercontent.com/golan-ser/polling_locator/main/polling_stations.json');
+            return await response.json();
+        }
+
+        function findClosestStation(lat, lng, stations) {
+            let closestStation = null;
+            let shortestDistance = Infinity;
+            stations.forEach(station => {
+                const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
+                if (distance < shortestDistance) {
+                    shortestDistance = distance;
+                    closestStation = station;
+                }
+            });
+            return closestStation;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the Earth in km
+            const dLat = (lat2 - lat1) * (Math.PI / 180);
+            const dLon = (lon2 - lon1) * (Math.PI / 180);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function displayResult(station) {
+            if (station) {
+                document.getElementById('result').innerHTML = `
+                    <p>הקלפי הקרובה ביותר אליך היא: <strong>${station.name}</strong></p>
+                    <button class="google-btn" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
+                    <button class="waze-btn" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
+                `;
+            } else {
+                document.getElementById('result').innerHTML = `<p>לא נמצאה קלפי קרובה.</p>`;
+            }
+        }
+
+        function openGoogleMaps(lat, lng) {
+            window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
+        }
+
+        function openWaze(lat, lng) {
+            window.open(`https://waze.com/ul?ll=${lat},${lng}&navigate=yes`);
+        }
     </script>
 </body>
 </html>
