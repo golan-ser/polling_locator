@@ -94,6 +94,26 @@
                 alert("המכשיר שלך לא תומך בשירותי מיקום");
             }
         }
+		function showError(error) {
+    let message = "";
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            message = "❌ עליך לאשר גישה למיקום!";
+            break;
+        case error.POSITION_UNAVAILABLE:
+            message = "❌ לא ניתן לאתר את המיקום שלך.";
+            break;
+        case error.TIMEOUT:
+            message = "❌ לקח יותר מדי זמן לאתר את המיקום.";
+            break;
+        case error.UNKNOWN_ERROR:
+            message = "❌ שגיאה לא ידועה.";
+            break;
+    }
+    console.error("❌ שגיאת מיקום:", message);
+    document.getElementById("result").innerHTML = message;
+}
+
 
         function showPosition(position) {
             console.log(`✅ מיקום נמצא: LAT=${position.coords.latitude}, LON=${position.coords.longitude}`);
