@@ -8,28 +8,16 @@
     <script defer src="script.js"></script>
 </head>
 <body>
-
-    <!-- מציאת קלפי קרובה -->
+    <!-- אזור ראשון - מציאת קלפי קרובה -->
     <div class="container">
         <h1>מציאת קלפי קרובה לבחירות מעלה יוסף</h1>
-        <div class="separator"></div>
-
-        <!-- תמונת הקמפיין -->
         <div class="campaign-banner">
             <img src="shimon.jpg" alt="קמפיין שמעון">
         </div>
-
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        
-        <button id="findPollingBtn" class="cta-button">
-            🔍 מצא קלפי קרובה
-        </button>
-
-        <div id="result" class="result-box hidden">
-            <p class="polling-info"></p>
-        </div>
-
-        <div id="navigation-logos" class="navigation hidden">
+        <button id="findPollingBtn">🔍 מצא קלפי קרובה</button>
+        <div id="result"></div>
+        <div class="navigation-logos">
             <a id="googleMapsLink" target="_blank">
                 <img src="Google-Maps.jpg" alt="Google Maps">
             </a>
@@ -39,13 +27,11 @@
         </div>
     </div>
 
-    <!-- הפרדה בין החלקים -->
     <div class="separator"></div>
 
-    <!-- רשימת הקלפיות הארצית -->
+    <!-- אזור שני - רשימת הקלפיות הארצית -->
     <div class="container">
-        <h1>רשימת הקלפיות הארצית 📍</h1>
-        
+        <h1>📍 רשימת הקלפיות הארצית</h1>
         <div class="filters">
             <label for="regionFilter">בחר אזור:</label>
             <select id="regionFilter">
@@ -56,7 +42,6 @@
             </select>
             <input type="text" id="searchBox" placeholder="חפש לפי עיר או כתובת...">
         </div>
-        
         <table id="pollingTable">
             <thead>
                 <tr>
@@ -66,11 +51,8 @@
                     <th>ניווט</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- הנתונים ייטענו כאן דינמית -->
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
-
 </body>
 </html>
