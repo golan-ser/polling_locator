@@ -30,18 +30,14 @@ function getCurrentPosition() {
     });
 }
 
+// 📌 כאן עדכן את ה-URL לפי הפתרון המתאים לך!
+const jsonUrl = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
+
 async function fetchPollingStations() {
     try {
-        const url = "https://raw.githubusercontent.com/golan-ser/polling_locator/main/polling_stations_updated.json";
-        const response = await fetch(url, { headers: { 'Cache-Control': 'no-cache' } });
-
-        if (!response.ok) {
-            throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
-        }
-
-        const text = await response.text();
-        console.log("📄 JSON Response:", text);
-        return JSON.parse(text);
+        const response = await fetch(jsonUrl, { headers: { 'Cache-Control': 'no-cache' } });
+        if (!response.ok) throw new Error(`❌ שגיאה בטעינת JSON: ${response.status}`);
+        return await response.json();
     } catch (error) {
         console.error("⚠️ שגיאה בטעינת JSON:", error);
         return [];
