@@ -1,132 +1,76 @@
-/* ✅ עיצוב כללי של הדף */
+/* עיצוב כללי */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    color: #222; /* טקסט כהה */
+    text-align: center;
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    color: #fff;
 }
 
-/* ✅ קופסה מרכזית */
+/* קופסה מרכזית */
 .container {
-    background: rgba(20, 40, 60, 0.95); /* רקע כהה עם שקיפות */
+    background: rgba(0, 0, 0, 0.8);
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    text-align: center;
     width: 90%;
     max-width: 600px;
-    animation: fadeIn 1s ease-in-out;
+    margin: 50px auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* ✅ כותרת ראשית */
+/* כותרת ראשית */
 h1 {
     font-size: 2.5rem;
-    color: #FFD700; /* זהב */
+    color: #FFD700;
     font-weight: bold;
-    text-align: center;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ פס הפרדה */
-.separator {
+/* פס חוצה */
+hr {
+    border: none;
     height: 2px;
-    background-color: gold;
-    margin: 10px auto 20px auto;
+    background-color: #FFD700;
+    margin: 10px auto;
     width: 80%;
 }
 
-/* ✅ עיצוב תמונת הקמפיין */
-.campaign-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
+/* תיבת התמונה */
 .campaign-banner {
+    display: block;
     width: 100%;
-    max-width: 500px;
+    max-width: 100%;
+    margin: 20px auto;
     border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
-    border: 3px solid gold;
+    border: 2px solid #FFD700;
 }
 
-/* ✅ עיצוב טקסט */
-p {
-    font-size: 1.2rem;
-    color: #EEE; /* טקסט בהיר */
-    margin-top: 15px;
-}
-
-/* ✅ כפתור למציאת קלפי */
-.find-btn {
-    background-color: #0056b3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border-radius: 12px;
-    font-size: 1.3rem;
+/* כפתור מצא קלפי - גדול וכתום */
+.button-primary {
+    display: block;
+    width: 80%;
+    max-width: 300px;
+    background-color: #FF8C00;
     color: white;
     padding: 15px;
-    cursor: pointer;
-    width: 100%;
+    font-size: 1.5rem;
     font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease-in-out, background 0.3s;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 20px auto;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
 }
 
-.find-btn:hover {
-    background: #003d82;
+.button-primary:hover {
+    background-color: #FFA500;
     transform: scale(1.05);
 }
 
-/* ✅ כפתורי ניווט */
-.google-btn,
-.waze-btn {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: white;
-    text-align: center;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, background 0.3s;
-    margin-top: 10px;
-}
-
-.google-btn {
-    background-color: #4285F4;
-}
-
-.waze-btn {
-    background-color: #00bcd4;
-}
-
-.google-btn:hover {
-    background-color: #357ae8;
-}
-
-.waze-btn:hover {
-    background-color: #0097a7;
-}
-
-/* ✅ אנימציית טעינה */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* סגנון טקסט */
+p {
+    font-size: 1.2rem;
+    color: #DDD;
 }
