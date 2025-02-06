@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.querySelector("#pollingTable tbody");
-    const regionFilter = document.getElementById("regionFilter");
     const searchBox = document.getElementById("searchBox");
 
     async function loadPollingStations() {
@@ -8,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const pollingStations = await response.json();
         renderTable(pollingStations);
 
-        regionFilter.addEventListener("change", () => filterAndRender(pollingStations));
         searchBox.addEventListener("input", () => filterAndRender(pollingStations));
     }
 
@@ -19,10 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
             row.innerHTML = `
                 <td>${station.city}</td>
                 <td>${station.address}</td>
-                <td>${station.polling_place}</td>
-                <td>${station.accessible ? "✅" : "❌"}</td>
                 <td>
                     <a href="https://www.google.com/maps/search/?api=1&query=${station.lat},${station.lon}" target="_blank">📍 Google Maps</a>
+                    |
+                    <a href="https://waze.com/ul?ll=${station.lat},${station.lon}&navigate=yes" target="_blank">🗺️ Waze</a>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -30,15 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function filterAndRender(pollingStations) {
-        const selectedRegion = regionFilter.value;
         const searchText = searchBox.value.toLowerCase();
         
-        const filteredStations = pollingStations.filter(station => {
-            const matchesRegion = selectedRegion === "all" || station.region === selectedRegion;
-            const matchesSearch = station.city.toLowerCase().includes(searchText) ||
-                station.address.toLowerCase().includes(searchText);
-            return matchesRegion && matchesSearch;
-        });
+        const filteredStations = pollingStations.filter(station => 
+            station.city.toLowerCase().includes(searchText) ||
+            station.address.toLowerCase().includes(searchText)
+        );
         
         renderTable(filteredStations);
     }
