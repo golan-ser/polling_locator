@@ -1,3 +1,4 @@
+// פונקציה ראשית למציאת הקלפי הקרובה ביותר
 async function findNearestPollingStation() {
     try {
         const position = await getCurrentPosition();
@@ -36,7 +37,7 @@ function getCurrentPosition() {
     });
 }
 
-// טוען את קובץ הקלפיות מהשרת או מהלוקאלי
+// טוען את קובץ הקלפיות מהשרת או מקובץ JSON
 async function fetchPollingStations() {
     let url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";  // עדכן לפי השרת שלך
 
