@@ -1,23 +1,39 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const findBtn = document.getElementById("findPollingBtn");
-    const navigationLogos = document.getElementById("navigation-logos");
-    navigationLogos.style.display = "none"; // הסתרת הלוגואים בהתחלה
+document.getElementById("findPollingBtn").addEventListener("click", findNearestPollingStation);
 
-    findBtn.addEventListener("click", async function () {
-        try {
-            const position = await getCurrentPosition();
-            const pollingStations = await fetchPollingStations();
-            const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
-            displayResult(nearest);
-        } catch (error) {
-            document.getElementById('result').innerHTML = `<p>שגיאה: ${error.message}</p>`;
+async function findNearestPollingStation() {
+    try {
+        const position = await getCurrentPosition();
+        const pollingStations = await fetchPollingStations();
+        const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
+        displayResult(nearest);
+    } catch (error) {
+        document.getElementById('result').innerHTML = `<p style="color: red;">שגיאה: ${error.message}</p>`;
+    }
+}
+
+function getCurrentPosition() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error("שירותי מיקום לא זמינים בדפדפן"));
+        } else {
+            navigator.geolocation.getCurrentPosition(resolve, error => {
+                reject(new Error("גישה למיקום נדחתה, אנא אפשר הרשאה בדפדפן"));
+            });
         }
     });
-});
+}
 
 async function fetchPollingStations() {
-    const response = await fetch('polling_stations.json');
-    return await response.json();
+    try {
+        const response = await fetch('polling_stations_updated.json', { headers: { 'Cache-Control': 'no-cache' } });
+        if (!response.ok) {
+            throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("שגיאה בטעינת קובץ הקלפיות:", error);
+        document.getElementById('result').innerHTML = "<p style='color:red;'>שגיאה בטעינת נתוני הקלפיות.</p>";
+    }
 }
 
 function findClosestStation(lat, lng, stations) {
@@ -45,32 +61,22 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function displayResult(station) {
+    const resultDiv = document.getElementById('result');
+    const navigationLogos = document.getElementById('navigation-logos');
+    
     if (station) {
-        document.getElementById('result').innerHTML = `
-            <p>הקלפי הקרובה ביותר אליך: <strong>${station["כתובת מלאה"]}</strong></p>
-            <div class="navigation-buttons" id="navigation-logos">
-                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
-                    <img src="Google-Maps.jpg" alt="Google Maps">
-                </a>
-                <a href="https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
-                    <img src="waze.jpg" alt="Waze">
-                </a>
-            </div>
+        resultDiv.innerHTML = `
+            <p class="polling-info">📍 הקלפי הקרובה ביותר אליך: ${station["כתובת מלאה"]}</p>
         `;
-        document.getElementById("navigation-logos").style.display = "block"; // הצגת הלוגואים אחרי שהתוצאה נמצאה
-    } else {
-        document.getElementById('result').innerHTML = `<p>לא נמצאה קלפי קרובה.</p>`;
-    }
-}
 
-function getCurrentPosition() {
-    return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-            reject(new Error("שירותי מיקום לא זמינים בדפדפן"));
+        if (station.latitude && station.longitude) {
+            document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+            document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
+            navigationLogos.classList.remove("hidden");
         } else {
-            navigator.geolocation.getCurrentPosition(resolve, error => {
-                reject(new Error("גישה למיקום נדחתה, אנא אפשר הרשאה בדפדפן"));
-            });
+            resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
         }
-    });
+    } else {
+        resultDiv.innerHTML = `<p style="color:red;">❌ לא נמצאה קלפי קרובה.</p>`;
+    }
 }

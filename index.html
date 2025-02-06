@@ -9,12 +9,36 @@
 <body>
     <div class="container">
         <h1>מציאת קלפי קרובה לבחירות מעלה יוסף</h1>
-        <img src="shimon.jpg" alt="קמפיין" class="campaign-banner">
+        <div class="separator"></div>
+
+        <!-- תמונת הקמפיין -->
+        <div class="campaign-banner">
+            <img src="shimon.jpg" alt="קמפיין שמעון">
+        </div>
+
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        <button id="findPollingBtn"><span>🔍</span> מצא קלפי קרובה</button>
-        <div id="result"></div>
-        <div class="navigation-buttons" id="navigation-logos"></div>
+        
+        <!-- כפתור למציאת קלפי -->
+        <button id="findPollingBtn">
+            <span>🔍 מצא קלפי קרובה</span>
+        </button>
+
+        <!-- תוצאה -->
+        <div id="result">
+            <p class="polling-info"></p>
+        </div>
+
+        <!-- לוגואים של Google Maps ו-Waze, מוסתרים בהתחלה -->
+        <div id="navigation-logos" class="hidden">
+            <a id="googleMapsLink" target="_blank">
+                <img src="Google-Maps.jpg" alt="Google Maps">
+            </a>
+            <a id="wazeLink" target="_blank">
+                <img src="waze.jpg" alt="Waze">
+            </a>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
