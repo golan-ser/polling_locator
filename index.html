@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מציאת קלפי במעלה יוסף</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&family=Rubik:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&family=Rubik:wght@400;700&family=Assistant:wght@400;700&display=swap');
 
         body {
-            font-family: 'Heebo', 'Rubik', sans-serif;
+    font-family: 'Heebo', 'Rubik', 'Assistant', sans-serif;
+    background: url('https://golan-ser.github.io/polling_locator/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    color: #FFFFFF;
+    overflow-x: hidden;
+}
+            font-family: 'Heebo', 'Rubik', 'Assistant', sans-serif;
             background: url('https://golan-ser.github.io/polling_locator/background.jpg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
@@ -32,11 +41,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: 2px solid #FFD700;
+            border: 3px solid #FFD700;
         }
 
         h1 {
-            font-size: 36px;
+    font-size: 42px;
+    font-weight: 900;
+    text-align: center;
+    color: #FFD700;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 3px solid #FFD700;
+    padding-bottom: 10px;
+}
+            font-size: 40px;
             font-weight: bold;
             text-align: center;
             color: #FFD700;
@@ -44,12 +61,21 @@
         }
 
         .campaign-banner {
+    display: block;
+    margin: 20px auto;
+    width: 550px;
+    border-radius: 12px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    border: 4px solid #FFD700;
+    transition: transform 0.3s ease-in-out;
+}
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             margin-bottom: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             transition: transform 0.3s ease-in-out;
+            border: 3px solid #FFD700;
         }
 
         .campaign-banner:hover {
@@ -57,31 +83,54 @@
         }
 
         .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 14px 26px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    width: 100%;
+    max-width: 320px;
+}
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #007bff, #FFD700);
             color: white;
-            padding: 12px 24px;
+            padding: 15px 30px;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-decoration: none;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
+        }
+
+        .button i {
+            margin-right: 10px;
         }
 
         .button:hover {
+    background: linear-gradient(135deg, #0056b3, #003d7a);
+    transform: scale(1.08);
+}
             background: linear-gradient(135deg, #FFD700, #007bff);
             transform: scale(1.05);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -90,7 +139,9 @@
         <h1>מציאת קלפי קרובה במועצת מעלה יוסף</h1>
         <img src='https://golan-ser.github.io/polling_locator/shimon.jpg' class='campaign-banner' alt='קמפיין שמעון גואטה'>
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        <button class="button" onclick="findNearestPollingStation()">מצא קלפי קרובה</button>
+        <button class="button" onclick="findNearestPollingStation()">
+            <i class="fas fa-map-marker-alt"></i> מצא קלפי קרובה
+        </button>
         <div id="result"><p>הקלפי הקרובה ביותר אליך היא:</p></div>
     </div>
 
@@ -129,31 +180,6 @@
                 return await response.json();
             } catch (error) {
                 document.getElementById('result').innerHTML = "<p>שגיאה בטעינת נתוני הקלפיות.</p>";
-            }
-        }
-
-        function findClosestStation(lat, lng, stations) {
-            let closestStation = null;
-            let shortestDistance = Infinity;
-            stations.forEach(station => {
-                const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
-                if (distance < shortestDistance) {
-                    shortestDistance = distance;
-                    closestStation = station;
-                }
-            });
-            return closestStation;
-        }
-
-        function displayResult(station) {
-            if (station) {
-                document.getElementById('result').innerHTML = `
-                    <p>הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
-                    <button class="button" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
-                    <button class="button" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
-                `;
-            } else {
-                document.getElementById('result').innerHTML = `<p>לא נמצאה קלפי קרובה.</p>`;
             }
         }
     </script>
