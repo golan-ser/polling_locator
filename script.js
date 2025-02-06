@@ -24,28 +24,24 @@ async function findNearestPollingStation() {
 function getCurrentPosition() {
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-            reject(new Error("שירותי מיקום לא זמינים בדפדפן"));
+            reject(new Error("❌ שירותי מיקום לא זמינים בדפדפן"));
         } else {
-            navigator.geolocation.getCurrentPosition(resolve, error => {
-                reject(new Error("גישה למיקום נדחתה, אנא אפשר הרשאה בדפדפן"));
+            navigator.geolocation.getCurrentPosition(position => {
+                console.log("✅ מיקום משתמש:", position.coords.latitude, position.coords.longitude);
+                resolve(position);
+            }, error => {
+                reject(new Error("❌ גישה למיקום נדחתה, אנא אפשר הרשאה בדפדפן"));
             });
         }
     });
 }
 
-// טוען את קובץ הנתונים בהתאם לסביבה (מקומי או GitHub Pages)
+// טוען את קובץ הקלפיות מהשרת או מהלוקאלי
 async function fetchPollingStations() {
-    let url;
+    let url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";  // עדכן לפי השרת שלך
 
-    // אם האתר רץ מקומית
-    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-        url = "http://localhost:8000/polling_stations_updated.json";  // ודא שהשרת פועל עם `python -m http.server`
-    } else {
-        url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
-    }
-
+    console.log(`📂 מנסה לטעון נתונים מ- ${url}`);
     try {
-        console.log(`📂 מנסה לטעון נתונים מ- ${url}`);
         const response = await fetch(url, { headers: { 'Cache-Control': 'no-cache' } });
 
         if (!response.ok) {
@@ -58,6 +54,7 @@ async function fetchPollingStations() {
     } catch (error) {
         console.error("❌ שגיאה בטעינת קובץ הקלפיות:", error);
         document.getElementById('result').innerHTML = "<p>❌ שגיאה בטעינת נתוני הקלפיות.</p>";
+        return [];
     }
 }
 
@@ -81,7 +78,7 @@ function findClosestStation(lat, lng, stations) {
         }
 
         const distance = calculateDistance(lat, lng, stationLat, stationLng);
-        console.log(`📍 מרחק לקלפי "${station["כתובת מלאה"]}": ${distance.toFixed(2)} ק"מ`);
+        console.log(`📍 מחשב מרחק לקלפי "${station["כתובת מלאה"]}": ${distance.toFixed(2)} ק"מ`);
 
         if (distance < shortestDistance) {
             shortestDistance = distance;
@@ -89,6 +86,7 @@ function findClosestStation(lat, lng, stations) {
         }
     });
 
+    console.log("✅ הקלפי שנבחרה:", closestStation);
     return closestStation;
 }
 
