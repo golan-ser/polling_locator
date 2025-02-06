@@ -1,15 +1,20 @@
 document.getElementById("findPollingBtn").addEventListener("click", findNearestPollingStation);
-
-async function findNearestPollingStation() {
+async function fetchPollingStations() {
     try {
-        const position = await getCurrentPosition();
-        const pollingStations = await fetchPollingStations();
-        const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
-        displayResult(nearest);
+        const response = await fetch('https://raw.githubusercontent.com/golan-ser/polling_locator/refs/heads/main/polling_stations_updated.json', 
+        { headers: { 'Cache-Control': 'no-cache' } });
+
+        if (!response.ok) {
+            throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
+        }
+
+        return await response.json();
     } catch (error) {
-        document.getElementById('result').innerHTML = `<p style="color: red;">שגיאה: ${error.message}</p>`;
+        console.error("שגיאה בטעינת קובץ הקלפיות:", error);
+        document.getElementById('result').innerHTML = "<p style='color:red;'>שגיאה בטעינת נתוני הקלפיות.</p>";
     }
 }
+
 
 function getCurrentPosition() {
     return new Promise((resolve, reject) => {
@@ -80,8 +85,6 @@ function displayResult(station) {
         resultDiv.innerHTML = `<p style="color:red;">❌ לא נמצאה קלפי קרובה.</p>`;
     }
 }
-
-
     function renderTable(data) {
         tableBody.innerHTML = "";
         data.forEach(station => {
