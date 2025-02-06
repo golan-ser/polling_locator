@@ -20,6 +20,7 @@ async function findNearestPollingStation() {
     }
 }
 
+// פונקציה לקבלת מיקום משתמש
 function getCurrentPosition() {
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
@@ -32,11 +33,20 @@ function getCurrentPosition() {
     });
 }
 
+// טוען את קובץ הנתונים בהתאם לסביבה (מקומי או GitHub Pages)
 async function fetchPollingStations() {
+    let url;
+
+    // אם האתר רץ מקומית
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+        url = "http://localhost:8000/polling_stations_updated.json";  // ודא שהשרת פועל עם `python -m http.server`
+    } else {
+        url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
+    }
+
     try {
-        const response = await fetch('polling_stations_updated.json', {
-            headers: { 'Cache-Control': 'no-cache' }
-        });
+        console.log(`📂 מנסה לטעון נתונים מ- ${url}`);
+        const response = await fetch(url, { headers: { 'Cache-Control': 'no-cache' } });
 
         if (!response.ok) {
             throw new Error(`❌ שגיאה בטעינת הנתונים: ${response.status}`);
@@ -51,6 +61,7 @@ async function fetchPollingStations() {
     }
 }
 
+// חישוב הקלפי הקרובה ביותר
 function findClosestStation(lat, lng, stations) {
     if (!stations || stations.length === 0) {
         console.error("❌ אין נתוני קלפיות להשוואה!");
@@ -61,7 +72,6 @@ function findClosestStation(lat, lng, stations) {
     let shortestDistance = Infinity;
 
     stations.forEach(station => {
-        // וידוא שהקואורדינטות הן מספרים
         let stationLat = parseFloat(station.latitude);
         let stationLng = parseFloat(station.longitude);
 
@@ -82,6 +92,7 @@ function findClosestStation(lat, lng, stations) {
     return closestStation;
 }
 
+// חישוב מרחק גיאוגרפי בין שתי נקודות
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // רדיוס כדור הארץ בק"מ
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -93,5 +104,25 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
+// הצגת התוצאה באתר
 function displayResult(station) {
-    if (!station || !station["כתובת מלאה"]) 
+    if (!station || !station["כתובת מלאה"]) {
+        document.getElementById('result').innerHTML = `<p>❌ לא נמצאה קלפי קרובה.</p>`;
+        return;
+    }
+
+    document.getElementById('result').innerHTML = `
+        <p>✅ הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
+        <button class="google-btn" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
+        <button class="waze-btn" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
+    `;
+}
+
+// פונקציות לנווט ל-Google Maps ול-Waze
+function openGoogleMaps(lat, lng) {
+    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
+}
+
+function openWaze(lat, lng) {
+    window.open(`https://waze.com/ul?ll=${lat},${lng}&navigate=yes`);
+}
