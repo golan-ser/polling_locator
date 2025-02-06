@@ -3,51 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מציאת קלפי קרובה לבחירות מעלה יוסף</title>
+    <title>מציאת קלפי קרובה ובדיקת קלפיות ארציות</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script defer src="script.js"></script>
 </head>
 <body>
+
+    <!-- חלק ראשון: מציאת קלפי קרובה -->
     <div class="container">
         <h1>מציאת קלפי קרובה לבחירות מעלה יוסף</h1>
-        <div class="separator"></div>
-
-        <!-- תמונת הקמפיין -->
         <div class="campaign-banner">
-            <img src="shimon.jpg" alt="קמפיין שמעון" class="campaign-image">
+            <img src="shimon.jpg" alt="קמפיין שמעון">
         </div>
-
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        
-        <!-- כפתור למציאת קלפי -->
-        <button id="findPollingBtn" class="cta-button">
-            <span>🔍 מצא קלפי קרובה</span>
+        <button id="findPollingBtn" class="button">
+            🔍 מצא קלפי קרובה
         </button>
-
-        <!-- תוצאה -->
-        <div id="result" class="result-box hidden">
+        <div id="result">
             <p class="polling-info"></p>
         </div>
-
-        <!-- לוגואים של Google Maps ו-Waze -->
-        <div id="navigation-logos" class="navigation hidden">
-            <a id="googleMapsLink" target="_blank">
-                <img src="Google-Maps.jpg" alt="Google Maps">
-            </a>
-            <a id="wazeLink" target="_blank">
-                <img src="waze.jpg" alt="Waze">
-            </a>
+        <div id="navigation-logos" class="hidden">
+            <a id="googleMapsLink" target="_blank"><img src="google-maps-icon.png" alt="Google Maps"></a>
+            <a id="wazeLink" target="_blank"><img src="waze-icon.png" alt="Waze"></a>
         </div>
     </div>
 
-    <!-- הפרדה בין החלק הראשון לטבלה -->
-    <div class="separator large-separator"></div>
+    <!-- פס הפרדה בין החלקים -->
+    <div class="separator"></div>
 
-    <!-- טבלת רשימת הקלפיות הארצית -->
+    <!-- חלק שני: רשימת הקלפיות הארצית -->
     <div class="container">
-        <h2>🔹 רשימת הקלפיות הארצית</h2>
-
+        <h1>רשימת הקלפיות הארצית</h1>
         <div class="filters">
             <label for="regionFilter">בחר אזור:</label>
             <select id="regionFilter">
@@ -55,18 +41,14 @@
                 <option value="צפון">צפון</option>
                 <option value="מרכז">מרכז</option>
                 <option value="דרום">דרום</option>
-                <option value="חיפה">חיפה</option>
-                <option value="ירושלים">ירושלים</option>
-                <option value="תל אביב">תל אביב</option>
             </select>
-            <input type="text" id="searchBox" placeholder="🔍 חפש לפי עיר או כתובת...">
+            <input type="text" id="searchBox" placeholder="חפש לפי עיר או כתובת...">
         </div>
-
         <table id="pollingTable">
             <thead>
                 <tr>
                     <th>אזור</th>
-                    <th>רשות מקומית</th>
+                    <th>עיר</th>
                     <th>כתובת</th>
                     <th>ניווט</th>
                 </tr>
@@ -77,6 +59,5 @@
         </table>
     </div>
 
-    <script src="script.js"></script>
 </body>
 </html>

@@ -4,12 +4,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchBox = document.getElementById("searchBox");
 
     async function loadPollingStations() {
-        const response = await fetch("polling_stations_updated.json");
-        const pollingStations = await response.json();
-        renderTable(pollingStations);
+        try {
+            const response = await fetch("polling_stations_updated.json");
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const pollingStations = await response.json();
+            renderTable(pollingStations);
 
-        regionFilter.addEventListener("change", () => filterAndRender(pollingStations));
-        searchBox.addEventListener("input", () => filterAndRender(pollingStations));
+            regionFilter.addEventListener("change", () => filterAndRender(pollingStations));
+            searchBox.addEventListener("input", () => filterAndRender(pollingStations));
+        } catch (error) {
+            console.error("שגיאה בטעינת קובץ JSON:", error);
+        }
     }
 
     function renderTable(data) {
@@ -17,9 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
         data.forEach(station => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${station.region}</td>
-                <td>${station.city}</td>
-                <td>${station.address}</td>
+                <td>${station.region || "לא ידוע"}</td>
+                <td>${station.city || "לא ידוע"}</td>
+                <td>${station.address || "לא ידוע"}</td>
                 <td>
                     <a href="https://www.google.com/maps/search/?api=1&query=${station.lat},${station.lon}" target="_blank">
                         <img src="google-maps-icon.png" alt="Google Maps">
