@@ -1,4 +1,4 @@
-/* כללית */
+/* רקע כללי */
 body {
     font-family: 'Heebo', sans-serif;
     background: url('background.jpg') no-repeat center center fixed;
@@ -9,7 +9,7 @@ body {
     direction: rtl;
 }
 
-/* קונטיינר מרכזי */
+/* קונטיינר */
 .container {
     background: rgba(10, 37, 64, 0.85);
     backdrop-filter: blur(10px);
@@ -20,66 +20,70 @@ body {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* תמונת הקמפיין */
-.campaign-banner img {
-    width: 100%;
-    border-radius: 10px;
-    border: 3px solid #FFD700;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+/* כותרות */
+h1 {
+    font-size: 38px;
+    font-weight: 900;
+    color: #D4AF37;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    border-bottom: 3px solid #D4AF37;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+/* פס הפרדה */
+.separator {
+    width: 80%;
+    height: 3px;
+    background-color: #D4AF37;
+    margin: 15px auto;
 }
 
 /* כפתור */
-.button {
+.cta-button {
     background: linear-gradient(135deg, #0A2540, #061a2d);
-    color: #FFD700;
+    color: #D4AF37;
     padding: 14px 26px;
     border-radius: 10px;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    border: 2px solid #FFD700;
+    border: 2px solid #D4AF37;
 }
 
-.button:hover {
+.cta-button:hover {
+    background: linear-gradient(135deg, #061a2d, #020d18);
     transform: scale(1.08);
 }
 
 /* טבלה */
 table {
     width: 100%;
+    margin-top: 20px;
     border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
 }
 
 th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #D4AF37;
+    padding: 10px;
     text-align: center;
 }
 
 th {
-    background: #FFD700;
-    font-size: 18px;
+    background-color: #D4AF37;
+    color: #0A2540;
 }
 
-td a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-    margin: 5px;
+/* כפתורי ניווט */
+.navigation img {
+    width: 90px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
 }
 
-td img {
-    width: 24px;
-    vertical-align: middle;
-}
-
-/* הפרדה */
-.separator {
-    width: 80%;
-    height: 3px;
-    background-color: #FFD700;
-    margin: 15px auto;
+.navigation img:hover {
+    transform: scale(1.1);
 }
