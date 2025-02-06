@@ -75,6 +75,8 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 function displayResult(station) {
     const resultDiv = document.getElementById('result');
+    const navigationLogos = document.getElementById('navigation-logos');
+
     if (!resultDiv) {
         console.error("⚠️ אלמנט 'result' לא נמצא ב-HTML!");
         return;
@@ -90,7 +92,12 @@ function displayResult(station) {
         if (station.latitude && station.longitude) {
             document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
             document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
-            document.getElementById("navigation-logos").classList.remove("hidden");
+
+            if (navigationLogos) {
+                navigationLogos.classList.remove("hidden");
+            } else {
+                console.warn("⚠️ אלמנט 'navigation-logos' לא נמצא, לא ניתן להציג קישורים לניווט.");
+            }
         } else {
             resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
         }
