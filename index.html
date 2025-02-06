@@ -5,42 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מציאת קלפי במעלה יוסף</title>
     <style>
-        body { font-family: 'Heebo', 'Assistant', 'Rubik', sans-serif; background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); color: #0A2540; margin: 0; padding: 0; overflow-x: hidden; } font-family: 'Heebo', 'Assistant', 'Noto Sans Hebrew', sans-serif; background: url('https://golan-ser.github.io/polling_locator/background.jpg') no-repeat center center fixed; background-size: cover; filter: brightness(0.9); color: #FFFFFF; font-family: 'Heebo', sans-serif; background: url('https://golan-ser.github.io/polling_locator/background.jpg') no-repeat center center fixed; background-size: cover; filter: brightness(0.9);
-            font-family: 'Arial', sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&family=Rubik:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Heebo', 'Rubik', sans-serif;
+            background: url('https://golan-ser.github.io/polling_locator/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
             padding: 0;
-            color: #333;
-            background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/background.jpg') no-repeat center center fixed; background-size: cover; filter: brightness(0.8); background-size: cover;
-            background-size: cover;
+            color: #FFFFFF;
+            overflow-x: hidden;
         }
-        .container { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 1.5s ease-in-out; text-align: center; color: white; width: 90%; max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; border: 2px solid #FFD700; } background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 1.5s ease-in-out; text-align: center; color: white; width: 90%; max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; border: 2px solid #FFD700; background: rgba(0, 0, 0, 0.85); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); animation: fadeIn 1.5s ease-in-out; text-align: center; color: white; width: 90%; max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; background: rgba(0, 0, 0, 0.8); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); animation: fadeIn 1.5s ease-in-out; text-align: center; color: white; width: 90%; max-width: 500px; background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out; background: url('https://golan-ser.github.io/polling_locator/shimon.jpg') no-repeat center center fixed; background-size: cover; background-size: cover; background-size: cover; background-size: cover; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: fadeIn 1.5s ease-in-out;
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1.5s ease-in-out;
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8); color: white;
-            border-radius: 12px;
-            width: 80%;
-            max-width: 600px;
-            margin: 50px auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #FFD700;
         }
-        h1 { font-size: 3.5rem; color: #FFD700; font-weight: bold; text-align: center; text-shadow: 3px 3px 15px rgba(0,0,0,0.7); animation: fadeIn 1.5s ease-in-out; border-bottom: 2px solid #FFD700; padding-bottom: 10px; } font-size: 3.5rem; color: #FFD700; font-weight: bold; text-align: center; font-family: 'Heebo', sans-serif; text-shadow: 3px 3px 15px rgba(0,0,0,0.7); animation: fadeIn 1.5s ease-in-out; border-bottom: 2px solid #FFD700; padding-bottom: 10px; font-size: 3rem; color: #FFFFFF; font-weight: bold; text-align: center; font-family: 'Heebo', sans-serif; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); font-size: 2.5rem; color: #003366; font-weight: bold; text-align: center; font-family: 'Arial', sans-serif; }
-        .campaign-banner { width: 100%; max-width: 500px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 3px solid #FFD700; transition: transform 0.3s ease-in-out; } .campaign-banner:hover { transform: scale(1.05); } width: 100%; height: auto; max-width: 500px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 3px solid #FFD700;} width: 100%; height: auto; max-width: 500px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);} width: 100%; height: auto; max-width: 100%; margin: auto; display: block; border-radius: 10px; background: url('https://golan-ser.github.io/polling_locator/shimon.jpg') no-repeat center center; background-size: contain; height: 250px; }
-        button { padding: 18px; font-size: 1.5rem; margin-top: 20px; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s ease-in-out, background 0.3s; width: 100%; font-weight: bold; background: linear-gradient(135deg, #007bff, #FFD700); color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); } button:hover { background: linear-gradient(135deg, #FFD700, #007bff); color: black; transform: scale(1.05); } padding: 20px; font-size: 1.5rem; margin-top: 20px; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s ease-in-out, background 0.3s; width: 100%; font-weight: bold; background: linear-gradient(135deg, #002855 0%, #FFD700 100%); color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); animation: pulse 1.5s infinite;} .container button:hover { background: linear-gradient(135deg, #FFD700 0%, #002855 100%); color: black; transform: scale(1.05); } padding: 20px; font-size: 1.5rem; margin-top: 20px; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s ease-in-out, background 0.3s; width: 100%; font-weight: bold; background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%); color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); animation: pulse 1.5s infinite; padding: 18px; font-size: 1.5rem; margin-top: 20px; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s ease-in-out, background 0.3s; width: 100%; font-weight: bold; background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%); color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); animation: pulse 1.5s infinite; padding: 20px; font-size: 1.5rem; margin-top: 20px; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.2s ease-in-out, background 0.3s; width: 100%; font-weight: bold; background: #FFA500; color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); animation: pulse 1.5s infinite; }
-        .google-btn { background-color: #4285F4; color: white; width: 100%; margin-top: 10px;
-            background-color: #4285F4;
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            color: #FFD700;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .campaign-banner {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .campaign-banner:hover {
+            transform: scale(1.05);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #007bff, #FFD700);
             color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            width: 100%;
+            max-width: 300px;
         }
-        .google-btn:hover {
-            background-color: #357ae8;
+
+        .button:hover {
+            background: linear-gradient(135deg, #FFD700, #007bff);
+            transform: scale(1.05);
         }
-        .waze-btn { background-color: #00bcd4; color: white; width: 100%; margin-top: 10px;
-            background-color: #00bcd4;
-            color: white;
-        }
-        .waze-btn:hover {
-            background-color: #0097a7;
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -49,7 +90,7 @@
         <h1>מציאת קלפי קרובה במועצת מעלה יוסף</h1>
         <img src='https://golan-ser.github.io/polling_locator/shimon.jpg' class='campaign-banner' alt='קמפיין שמעון גואטה'>
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        <button onclick="findNearestPollingStation()">מצא קלפי קרובה</button>
+        <button class="button" onclick="findNearestPollingStation()">מצא קלפי קרובה</button>
         <div id="result"><p>הקלפי הקרובה ביותר אליך היא:</p></div>
     </div>
 
@@ -87,7 +128,6 @@
                 }
                 return await response.json();
             } catch (error) {
-                console.error("שגיאה בטעינת קובץ הקלפיות:", error);
                 document.getElementById('result').innerHTML = "<p>שגיאה בטעינת נתוני הקלפיות.</p>";
             }
         }
@@ -105,35 +145,16 @@
             return closestStation;
         }
 
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2 - lat1) * (Math.PI / 180);
-            const dLon = (lon2 - lon1) * (Math.PI / 180);
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
-        }
-
-        function displayResult(station) { document.getElementById('result').style.color = '#222';
+        function displayResult(station) {
             if (station) {
                 document.getElementById('result').innerHTML = `
                     <p>הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
-                    <button class="google-btn" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
-                    <button class="waze-btn" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
+                    <button class="button" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
+                    <button class="button" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
                 `;
             } else {
                 document.getElementById('result').innerHTML = `<p>לא נמצאה קלפי קרובה.</p>`;
             }
-        }
-
-        function openGoogleMaps(lat, lng) {
-            window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
-        }
-
-        function openWaze(lat, lng) {
-            window.open(`https://waze.com/ul?ll=${lat},${lng}&navigate=yes`);
         }
     </script>
 </body>
