@@ -1,35 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const findPollingBtn = document.getElementById("findPollingBtn");
-    const resultBox = document.getElementById("result");
-    const pollingInfo = document.querySelector(".polling-info");
-    const navigationLogos = document.getElementById("navigation-logos");
-    const googleMapsLink = document.getElementById("googleMapsLink");
-    const wazeLink = document.getElementById("wazeLink");
+    const tableBody = document.querySelector("#pollingTable tbody");
+    const regionFilter = document.getElementById("regionFilter");
+    const searchBox = document.getElementById("searchBox");
 
-    findPollingBtn.addEventListener("click", function () {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const userLat = position.coords.latitude;
-                const userLon = position.coords.longitude;
+    async function loadPollingStations() {
+        const response = await fetch("polling_stations_updated.json");
+        const pollingStations = await response.json();
+        renderTable(pollingStations);
 
-                // חישוב הקלפי הקרובה ביותר (דוגמה בלבד)
-                let closestPolling = "הר תבור 1"; 
-                pollingInfo.textContent = `📍 הקלפי הקרובה ביותר אליך: ${closestPolling}`;
+        regionFilter.addEventListener("change", () => filterAndRender(pollingStations));
+        searchBox.addEventListener("input", () => filterAndRender(pollingStations));
+    }
 
-                // הצגת התוצאה
-                resultBox.classList.remove("hidden");
-                navigationLogos.classList.remove("hidden");
+    function renderTable(data) {
+        tableBody.innerHTML = "";
+        data.forEach(station => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${station.city}</td>
+                <td>${station.address}</td>
+                <td>${station.polling_place}</td>
+                <td>${station.accessible ? "✅" : "❌"}</td>
+                <td>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${station.lat},${station.lon}" target="_blank">📍 Google Maps</a>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
 
-                // יצירת קישורי ניווט
-                googleMapsLink.href = `https://www.google.com/maps/search/?api=1&query=${userLat},${userLon}`;
-                wazeLink.href = `https://waze.com/ul?ll=${userLat},${userLon}&navigate=yes`;
-            }, function (error) {
-                pollingInfo.textContent = "⚠️ לא ניתן לאתר את מיקומך. אפשר את שירותי המיקום ונסה שוב.";
-                resultBox.classList.remove("hidden");
-            });
-        } else {
-            pollingInfo.textContent = "⚠️ המכשיר שלך אינו תומך במיקום גיאוגרפי.";
-            resultBox.classList.remove("hidden");
-        }
-    });
+    function filterAndRender(pollingStations) {
+        const selectedRegion = regionFilter.value;
+        const searchText = searchBox.value.toLowerCase();
+        
+        const filteredStations = pollingStations.filter(station => {
+            const matchesRegion = selectedRegion === "all" || station.region === selectedRegion;
+            const matchesSearch = station.city.toLowerCase().includes(searchText) ||
+                station.address.toLowerCase().includes(searchText);
+            return matchesRegion && matchesSearch;
+        });
+        
+        renderTable(filteredStations);
+    }
+
+    loadPollingStations();
 });
