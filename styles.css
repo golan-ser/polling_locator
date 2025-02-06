@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.85); /* רקע פנימי כהה */
     padding: 30px;
     border-radius: 10px;
     max-width: 600px;
@@ -22,7 +22,7 @@ h1 {
 }
 
 button {
-    background-color: #ffd700; /* צבע צהוב */
+    background-color: #ffd700; /* כפתור צהוב */
     color: black;
     font-size: 18px;
     border: none;
@@ -34,6 +34,13 @@ button {
 
 button:hover {
     background-color: #e6c200;
+}
+
+.campaign-banner {
+    max-width: 100%;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
 }
 
 .navigation-buttons {
