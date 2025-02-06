@@ -115,9 +115,69 @@ function displayResult(station) {
         resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
     }
 }
+document.addEventListener("DOMContentLoaded", loadPollingStations);
 
+async function fetchPollingStations() {
+    try {
+        const url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
+        console.log("🔄 מנסה למשוך נתונים מתוך:", url);
+        
+        const response = await fetch(url, { headers: { 'Cache-Control': 'no-cache' } });
 
+        if (!response.ok) {
+            throw new Error(`❌ שגיאה בטעינת JSON: ${response.status}`);
+        }
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("✅ העמוד נטען בהצלחה!");
+        const data = await response.json();
+        console.log("✅ נתונים נטענו בהצלחה:", data);
+        return data;
+    } catch (error) {
+        console.error("⚠️ שגיאה בטעינת JSON:", error);
+        document.getElementById('pollingTable').innerHTML = "<p style='color:red;'>❌ שגיאה בטעינת רשימת הקלפיות.</p>";
+        return [];
+    }
+}
+
+async function loadPollingStations() {
+    const pollingStations = await fetchPollingStations();
+    if (pollingStations.length === 0) {
+        console.warn("⚠️ אין קלפיות להצגה.");
+        return;
+    }
+    renderTable(pollingStations);
+}
+
+function renderTable(data) {
+    const tableBody = document.getElementById("tableBody");
+    if (!tableBody) {
+        console.error("⚠️ אלמנט 'tableBody' לא נמצא!");
+        return;
+    }
+
+    tableBody.innerHTML = ""; // איפוס הטבלה
+    data.forEach(station => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td style="font-size: 18px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+                ${station["שם הרשות"] || "לא זמין"}
+            </td>
+            <td style="font-size: 18px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+                ${station["כתובת מלאה"] || "לא זמין"}
+            </td>
+            <td style="font-size: 18px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+                ${station["אזור"] || "לא זמין"}
+            </td>
+            <td>
+                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
+                    <img src="Google-Maps.jpg" alt="Google Maps" width="60" height="60">
+                </a> |
+                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
+                    <img src="waze.jpg" alt="Waze" width="60" height="60">
+                </a>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
 });
