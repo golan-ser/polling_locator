@@ -1,92 +1,79 @@
-/* עיצוב בסיסי */
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #fff;
-    text-align: center;
+    font-family: Arial, sans-serif;
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 
-/* קונטיינר מרכזי */
 .container {
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #FFD700;
     padding: 20px;
-    width: 90%;
-    max-width: 500px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 600px;
     margin: 50px auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
 }
 
-/* כותרת */
 h1 {
-    font-size: 2rem;
+    font-size: 24px;
     font-weight: bold;
-    color: #FFC107;
 }
 
-/* קו הפרדה */
 hr {
+    width: 80%;
+    height: 2px;
+    background: gold;
     border: none;
-    height: 3px;
-    background: #FFC107;
-    margin: 10px 0;
+    margin: 10px auto;
 }
 
-/* תמונת קמפיין */
 .campaign-banner img {
     width: 100%;
-    height: auto;
     border-radius: 10px;
-    border: 3px solid #FFC107;
+    border: 2px solid gold;
 }
 
-/* כפתור מציאת קלפי */
 button {
-    padding: 15px 20px;
-    font-size: 1.2rem;
+    background: #FFA500;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    width: 80%;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
-    width: 100%;
-    font-weight: bold;
-    background: #FF9800;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* אפקט hover לכפתור */
 button:hover {
-    background: #E65100;
-    transform: scale(1.05);
+    background: #FF8C00;
 }
 
-/* תצוגת הלוגואים רק לאחר לחיצה */
-.navigation-logos {
-    display: none; /* מוסתר בהתחלה */
-    margin-top: 15px;
+#result {
+    margin-top: 20px;
 }
 
-/* עיצוב ללוגואים */
-.logo-container {
+#navigation-buttons {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
-/* תמונות לוגו */
-.logo-container img {
-    width: 150px;  /* גודל אחיד */
-    height: auto;
-    transition: 0.3s ease-in-out;
+#navigation-buttons a img {
+    width: 120px;
+    transition: transform 0.3s ease-in-out;
 }
 
-/* אפקט hover ללוגואים */
-.logo-container img:hover {
+#navigation-buttons a img:hover {
     transform: scale(1.1);
-    filter: brightness(1.2);
+}
+
+.hidden {
+    display: none;
 }

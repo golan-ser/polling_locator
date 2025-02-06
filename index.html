@@ -10,21 +10,25 @@
     <div class="container">
         <h1>מציאת קלפי קרובה לבחירות מעלה יוסף</h1>
         <hr>
-        <div class="campaign-banner">
-            <img src="shimon.jpg" alt="קמפיין שמעון גואטה">
-        </div>
-        <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        <button id="find-polling-button">🔍 מצא קלפי קרובה</button>
-        <div id="result"></div>
 
-        <!-- לוגואים של ניווט -->
-        <div id="navigation-logos" class="navigation-logos">
-            <div class="logo-container">
-                <a href="#" id="google-maps-link" target="_blank">
-                    <img src="Google-Maps.jpg" alt="Google Maps">
+        <div class="campaign-banner">
+            <img src="shimon.jpg" alt="שמעון גואטה">
+        </div>
+
+        <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
+
+        <button id="findPollingBtn" onclick="findNearestPollingStation()">
+            <span>🔍 מצא קלפי קרובה</span>
+        </button>
+
+        <div id="result">
+            <p class="polling-info"></p>
+            <div id="navigation-buttons" class="hidden">
+                <a id="googleMapsBtn" href="#" target="_blank">
+                    <img src="Google-Maps.jpg" alt="ניווט עם Google Maps">
                 </a>
-                <a href="#" id="waze-link" target="_blank">
-                    <img src="waze.jpg" alt="Waze">
+                <a id="wazeBtn" href="#" target="_blank">
+                    <img src="waze.jpg" alt="ניווט עם Waze">
                 </a>
             </div>
         </div>

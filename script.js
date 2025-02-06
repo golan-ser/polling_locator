@@ -1,26 +1,14 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const button = document.getElementById("find-polling-button");
-    const resultDiv = document.getElementById("result");
-    const navigationLogos = document.getElementById("navigation-logos");
+async function findNearestPollingStation() {
+    try {
+        const position = await getCurrentPosition();
+        const pollingStations = await fetchPollingStations();
+        const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
+        displayResult(nearest);
+    } catch (error) {
+        document.getElementById('result').innerHTML = `<p style="color: red;">שגיאה: ${error.message}</p>`;
+    }
+}
 
-    button.addEventListener("click", async function () {
-        try {
-            const position = await getCurrentPosition();
-            const pollingStations = await fetchPollingStations();
-            const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
-            displayResult(nearest);
-            
-            // הצגת הלוגואים רק לאחר חיפוש מוצלח
-            if (nearest) {
-                navigationLogos.style.display = "block";
-            }
-        } catch (error) {
-            resultDiv.innerHTML = `<p style="color:red;">שגיאה: ${error.message}</p>`;
-        }
-    });
-});
-
-/* פונקציה לקבלת מיקום המשתמש */
 function getCurrentPosition() {
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
@@ -33,14 +21,57 @@ function getCurrentPosition() {
     });
 }
 
-/* פונקציה להצגת הקלפי הקרובה */
+async function fetchPollingStations() {
+    try {
+        const response = await fetch('polling_stations_updated.json', {
+            headers: { 'Cache-Control': 'no-cache' }
+        });
+        if (!response.ok) {
+            throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("שגיאה בטעינת קובץ הקלפיות:", error);
+        document.getElementById('result').innerHTML = "<p>שגיאה בטעינת נתוני הקלפיות.</p>";
+    }
+}
+
+function findClosestStation(lat, lng, stations) {
+    let closestStation = null;
+    let shortestDistance = Infinity;
+    stations.forEach(station => {
+        const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
+        if (distance < shortestDistance) {
+            shortestDistance = distance;
+            closestStation = station;
+        }
+    });
+    return closestStation;
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
 function displayResult(station) {
-    const resultDiv = document.getElementById("result");
+    const resultDiv = document.getElementById('result');
     if (station) {
-        resultDiv.innerHTML = `
-            <p>📍 הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
-        `;
+        resultDiv.innerHTML = `<p>📍 הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>`;
+        
+        // עדכון כפתורי הניווט עם הקואורדינטות הנכונות
+        document.getElementById('googleMapsBtn').href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+        document.getElementById('wazeBtn').href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
+
+        // הצגת כפתורי הניווט רק לאחר מציאת הקלפי
+        document.getElementById('navigation-buttons').classList.remove('hidden');
     } else {
-        resultDiv.innerHTML = `<p style="color:red;">❌ לא נמצאה קלפי קרובה.</p>`;
+        resultDiv.innerHTML = `<p style="color: red;">❌ לא נמצאה קלפי קרובה.</p>`;
     }
 }
