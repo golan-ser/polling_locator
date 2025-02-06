@@ -35,10 +35,10 @@ function getCurrentPosition() {
 
 async function fetchPollingStations() {
     try {
-        const proxyUrl = "https://cors-anywhere.herokuapp.com/"; // זמני לבדיקות בלבד
+        const proxyUrl = "https://api.allorigins.win/raw?url="; // פרוקסי חלופי לבעיית CORS
         const url = "https://raw.githubusercontent.com/golan-ser/polling_locator/main/polling_stations_updated.json";
 
-        const response = await fetch(proxyUrl + url, { headers: { 'Cache-Control': 'no-cache' } });
+        const response = await fetch(proxyUrl + encodeURIComponent(url));
         if (!response.ok) {
             throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
         }
