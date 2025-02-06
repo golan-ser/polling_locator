@@ -72,7 +72,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // התוצאה בקילומטרים
 }
-
 function displayResult(station) {
     const resultDiv = document.getElementById('result');
     const navigationLogos = document.getElementById('navigation-logos');
@@ -84,9 +83,15 @@ function displayResult(station) {
 
     if (station) {
         resultDiv.innerHTML = `
-            <p class="polling-info">📍 הקלפי הקרובה ביותר אליך:</p>
-            <p><strong>${station["כתובת מלאה"] || "לא זמין"}</strong></p>
-            <p>📌 אזור: ${station["אזור"] || "לא זמין"}</p>
+            <div style="font-size: 22px; font-weight: bold; color: #ff007f; margin-bottom: 10px;">
+                📍 הקלפי הקרובה ביותר אליך:
+            </div>
+            <p style="font-size: 20px; font-weight: bold; color: #ffffff;">
+                <span style="color: #ffcc00;">${station["כתובת מלאה"] || "לא זמין"}</span>
+            </p>
+            <p style="font-size: 18px; color: #ccc;">📌 אזור:
+                <span style="color: #ff4444;">${station["אזור"] || "לא זמין"}</span>
+            </p>
         `;
 
         if (station.latitude && station.longitude) {
@@ -95,6 +100,14 @@ function displayResult(station) {
 
             if (navigationLogos) {
                 navigationLogos.classList.remove("hidden");
+
+                // שינוי גודל הלוגואים
+                document.getElementById("googleMapsLink").innerHTML = `
+                    <img src="Google-Maps.jpg" alt="Google Maps" width="50" height="50">
+                `;
+                document.getElementById("wazeLink").innerHTML = `
+                    <img src="waze.jpg" alt="Waze" width="50" height="50">
+                `;
             } else {
                 console.warn("⚠️ אלמנט 'navigation-logos' לא נמצא, לא ניתן להציג קישורים לניווט.");
             }
@@ -102,9 +115,10 @@ function displayResult(station) {
             resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
         }
     } else {
-        resultDiv.innerHTML = `<p style="color:red;">❌ לא נמצאה קלפי קרובה.</p>`;
+        resultDiv.innerHTML = `<p style="color:red; font-size: 20px;">❌ לא נמצאה קלפי קרובה.</p>`;
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ העמוד נטען בהצלחה!");
