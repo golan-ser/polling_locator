@@ -81,43 +81,41 @@ function displayResult(station) {
         return;
     }
 
-    if (station) {
-        resultDiv.innerHTML = `
-            <div style="font-size: 22px; font-weight: bold; color: #ff007f; margin-bottom: 10px;">
-                📍 הקלפי הקרובה ביותר אליך:
-            </div>
-            <p style="font-size: 20px; font-weight: bold; color: #ffffff;">
-                <span style="color: #ffcc00;">${station["כתובת מלאה"] || "לא זמין"}</span>
-            </p>
-            <p style="font-size: 18px; color: #ccc;">📌 אזור:
-                <span style="color: #ff4444;">${station["אזור"] || "לא זמין"}</span>
-            </p>
-        `;
+    // הוספת עיצוב יוקרתי והפיכת כל הטקסט לצהוב
+    resultDiv.innerHTML = `
+        <div style="font-size: 24px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif; margin-bottom: 10px;">
+            📍 הקלפי הקרובה ביותר אליך:
+        </div>
+        <p style="font-size: 22px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+            ${station["כתובת מלאה"] || "לא זמין"}
+        </p>
+        <p style="font-size: 20px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+            אזור: ${station["אזור"] || "לא זמין"} 📌
+        </p>
+    `;
 
-        if (station.latitude && station.longitude) {
-            document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
-            document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
+    if (station.latitude && station.longitude) {
+        document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+        document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
 
-            if (navigationLogos) {
-                navigationLogos.classList.remove("hidden");
+        if (navigationLogos) {
+            navigationLogos.classList.remove("hidden");
 
-                // שינוי גודל הלוגואים
-                document.getElementById("googleMapsLink").innerHTML = `
-                    <img src="Google-Maps.jpg" alt="Google Maps" width="50" height="50">
-                `;
-                document.getElementById("wazeLink").innerHTML = `
-                    <img src="waze.jpg" alt="Waze" width="50" height="50">
-                `;
-            } else {
-                console.warn("⚠️ אלמנט 'navigation-logos' לא נמצא, לא ניתן להציג קישורים לניווט.");
-            }
+            // הגדלת הלוגואים ל-60px
+            document.getElementById("googleMapsLink").innerHTML = `
+                <img src="Google-Maps.jpg" alt="Google Maps" width="60" height="60">
+            `;
+            document.getElementById("wazeLink").innerHTML = `
+                <img src="waze.jpg" alt="Waze" width="60" height="60">
+            `;
         } else {
-            resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
+            console.warn("⚠️ אלמנט 'navigation-logos' לא נמצא, לא ניתן להציג קישורים לניווט.");
         }
     } else {
-        resultDiv.innerHTML = `<p style="color:red; font-size: 20px;">❌ לא נמצאה קלפי קרובה.</p>`;
+        resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
     }
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
