@@ -1,11 +1,22 @@
 async function findNearestPollingStation() {
     try {
         const position = await getCurrentPosition();
+        console.log("✅ מיקום משתמש:", position.coords.latitude, position.coords.longitude);
+
         const pollingStations = await fetchPollingStations();
+        console.log("✅ נתוני קלפיות שהתקבלו:", pollingStations);
+
+        if (!pollingStations || pollingStations.length === 0) {
+            throw new Error("❌ לא נמצאו קלפיות בנתונים!");
+        }
+
         const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
+        console.log("✅ הקלפי הקרובה ביותר:", nearest);
+
         displayResult(nearest);
     } catch (error) {
-        document.getElementById('result').innerHTML = `<p>שגיאה: ${error.message}</p>`;
+        console.error("❌ שגיאה:", error);
+        document.getElementById('result').innerHTML = `<p>❌ שגיאה: ${error.message}</p>`;
     }
 }
 
@@ -26,26 +37,44 @@ async function fetchPollingStations() {
         const response = await fetch('https://golan-ser.github.io/polling_locator/polling_stations_with_coordinates.json', {
             headers: { 'Cache-Control': 'no-cache' }
         });
+
         if (!response.ok) {
-            throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
+            throw new Error(`❌ שגיאה בטעינת הנתונים: ${response.status}`);
         }
-        return await response.json();
+
+        const data = await response.json();
+        console.log("📂 JSON נטען בהצלחה:", data);
+        return data;
     } catch (error) {
-        console.error("שגיאה בטעינת קובץ הקלפיות:", error);
-        document.getElementById('result').innerHTML = "<p>שגיאה בטעינת נתוני הקלפיות.</p>";
+        console.error("❌ שגיאה בטעינת קובץ הקלפיות:", error);
+        document.getElementById('result').innerHTML = "<p>❌ שגיאה בטעינת נתוני הקלפיות.</p>";
     }
 }
 
 function findClosestStation(lat, lng, stations) {
+    if (!stations || stations.length === 0) {
+        console.error("❌ אין נתוני קלפיות להשוואה!");
+        return null;
+    }
+
     let closestStation = null;
     let shortestDistance = Infinity;
+
     stations.forEach(station => {
+        if (!station.latitude || !station.longitude) {
+            console.warn("⚠️ קלפי עם נתונים חסרים:", station);
+            return;
+        }
+
         const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
+        console.log(`📍 מרחק לקלפי "${station["כתובת מלאה"]}": ${distance.toFixed(2)} ק"מ`);
+
         if (distance < shortestDistance) {
             shortestDistance = distance;
             closestStation = station;
         }
     });
+
     return closestStation;
 }
 
@@ -61,22 +90,14 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function displayResult(station) {
-    document.getElementById('result').style.color = '#222';
-    if (station) {
-        document.getElementById('result').innerHTML = `
-            <p>הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
-            <button class="google-btn" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
-            <button class="waze-btn" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
-        `;
-    } else {
-        document.getElementById('result').innerHTML = `<p>לא נמצאה קלפי קרובה.</p>`;
+    if (!station) {
+        document.getElementById('result').innerHTML = `<p>❌ לא נמצאה קלפי קרובה.</p>`;
+        return;
     }
-}
 
-function openGoogleMaps(lat, lng) {
-    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
-}
-
-function openWaze(lat, lng) {
-    window.open(`https://waze.com/ul?ll=${lat},${lng}&navigate=yes`);
+    document.getElementById('result').innerHTML = `
+        <p>✅ הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
+        <button class="google-btn" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
+        <button class="waze-btn" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
+    `;
 }
