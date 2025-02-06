@@ -1,3 +1,5 @@
+document.getElementById("findPollingBtn").addEventListener("click", findNearestPollingStation);
+
 async function findNearestPollingStation() {
     try {
         const position = await getCurrentPosition();
@@ -66,11 +68,14 @@ function displayResult(station) {
         resultDiv.innerHTML = `
             <p class="polling-info">📍 הקלפי הקרובה ביותר אליך: ${station["כתובת מלאה"]}</p>
         `;
-        document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
-        document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
-        
-        // הצגת הלוגואים לאחר מציאת הקלפי
-        navigationLogos.classList.remove("hidden");
+
+        if (station.latitude && station.longitude) {
+            document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+            document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
+            navigationLogos.classList.remove("hidden");
+        } else {
+            resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
+        }
     } else {
         resultDiv.innerHTML = `<p style="color:red;">❌ לא נמצאה קלפי קרובה.</p>`;
     }
