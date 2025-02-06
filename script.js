@@ -5,7 +5,7 @@ async function findNearestPollingStation() {
         const nearest = findClosestStation(position.coords.latitude, position.coords.longitude, pollingStations);
         displayResult(nearest);
     } catch (error) {
-        document.getElementById('result').innerHTML = `<p>שגיאה: ${error.message}</p>`;
+        document.getElementById('result').innerHTML = `<p>❌ שגיאה: ${error.message}</p>`;
     }
 }
 
@@ -23,7 +23,7 @@ function getCurrentPosition() {
 
 async function fetchPollingStations() {
     try {
-        const response = await fetch('polling_stations.json', {
+        const response = await fetch('polling_stations_updated.json', {
             headers: { 'Cache-Control': 'no-cache' }
         });
         if (!response.ok) {
@@ -32,7 +32,7 @@ async function fetchPollingStations() {
         return await response.json();
     } catch (error) {
         console.error("שגיאה בטעינת קובץ הקלפיות:", error);
-        document.getElementById('result').innerHTML = "<p>שגיאה בטעינת נתוני הקלפיות.</p>";
+        document.getElementById('result').innerHTML = "<p>❌ שגיאה בטעינת נתוני הקלפיות.</p>";
     }
 }
 
@@ -61,10 +61,15 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function displayResult(station) {
+    document.getElementById('result').style.color = '#FFFFFF';
     if (station) {
         document.getElementById('result').innerHTML = `
             <p>📍 הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
         `;
+
+        // עדכון קישורי הניווט
+        document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+        document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
     } else {
         document.getElementById('result').innerHTML = `<p>❌ לא נמצאה קלפי קרובה.</p>`;
     }
