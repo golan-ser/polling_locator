@@ -1,5 +1,6 @@
+/* רקע כללי */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Heebo', sans-serif;
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
     text-align: center;
@@ -8,58 +9,96 @@ body {
     direction: rtl;
 }
 
+/* קונטיינר מרכזי עם אפקט זכוכית */
 .container {
-    background: rgba(10, 37, 64, 0.95);
-    color: white;
-    width: 55%;
-    max-width: 750px;
-    padding: 40px;
+    background: rgba(10, 37, 64, 0.85);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
-    margin: 80px auto;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    width: 60%;
+    margin: 30px auto;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 }
 
+/* כותרת ראשית */
 h1 {
-    color: #ffcc00;
-    font-size: 2rem;
+    font-family: 'Heebo', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    text-align: center;
+    color: #D4AF37; /* זהב */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    border-bottom: 3px solid #D4AF37;
+    padding-bottom: 10px;
+    display: inline-block;
 }
 
+/* פסקאות כלליות */
+p {
+    font-family: 'Assistant', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: center;
+    color: #CCCCCC;
+}
+
+/* פס הפרדה */
 .separator {
     width: 80%;
     height: 3px;
-    background-color: #ffcc00;
+    background-color: #D4AF37;
     margin: 15px auto;
 }
 
+/* תמונת הקמפיין */
 .campaign-banner img {
     width: 100%;
     border-radius: 10px;
+    border: 3px solid #D4AF37;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-button {
-    background-color: #FFD700;
-    color: white;
-    border: none;
-    padding: 15px;
-    font-size: 1.3rem;
-    cursor: pointer;
+/* כפתור מציאת קלפי */
+.button {
+    background: linear-gradient(135deg, #0A2540, #061a2d);
+    color: #D4AF37;
+    padding: 14px 26px;
     border-radius: 10px;
-    width: 100%;
-    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    border: 2px solid #D4AF37;
+    display: inline-block;
+    text-align: center;
+    width: fit-content;
+    margin: auto;
 }
 
-button:hover {
-    background-color: #e07b00;
+/* אפקט מעבר על הכפתור */
+.button:hover {
+    background: linear-gradient(135deg, #061a2d, #020d18);
+    transform: scale(1.08);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* תיבת תוצאה - אפקט זכוכית */
 #result {
-    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 15px;
+    width: 80%;
+    margin: 20px auto;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.hidden {
-    display: none;
-}
-
+/* כפתורי ניווט Waze ו-Google Maps */
 #navigation-logos {
     display: flex;
     justify-content: center;
@@ -67,7 +106,19 @@ button:hover {
     margin-top: 15px;
 }
 
+/* תמונות הלוגואים */
 #navigation-logos img {
     width: 90px;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* אפקט מעבר על הלוגואים */
+#navigation-logos img:hover {
+    transform: scale(1.1);
+}
+
+/* הסתרת אלמנטים עד הצגת התוצאה */
+.hidden {
+    display: none;
 }

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>מציאת קלפי קרובה לבחירות מעלה יוסף</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -13,23 +15,23 @@
 
         <!-- תמונת הקמפיין -->
         <div class="campaign-banner">
-            <img src="shimon.jpg" alt="קמפיין שמעון">
+            <img src="shimon.jpg" alt="קמפיין שמעון" class="campaign-image">
         </div>
 
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
         
         <!-- כפתור למציאת קלפי -->
-        <button id="findPollingBtn">
+        <button id="findPollingBtn" class="cta-button">
             <span>🔍 מצא קלפי קרובה</span>
         </button>
 
         <!-- תוצאה -->
-        <div id="result">
+        <div id="result" class="result-box hidden">
             <p class="polling-info"></p>
         </div>
 
         <!-- לוגואים של Google Maps ו-Waze, מוסתרים בהתחלה -->
-        <div id="navigation-logos" class="hidden">
+        <div id="navigation-logos" class="navigation hidden">
             <a id="googleMapsLink" target="_blank">
                 <img src="Google-Maps.jpg" alt="Google Maps">
             </a>
