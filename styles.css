@@ -1,9 +1,9 @@
-/* ✅ עיצוב כללי */
+/* ✅ עיצוב כללי של הדף */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    color: #222; /* טקסט שחור כהה */
+    color: #222; /* טקסט כהה */
     background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
     display: flex;
@@ -12,28 +12,28 @@ body {
     height: 100vh;
 }
 
-/* ✅ עיצוב התיבה המרכזית */
+/* ✅ קופסה מרכזית */
 .container {
-    background: rgba(255, 255, 255, 0.9); /* רקע שקוף עדין */
+    background: rgba(20, 40, 60, 0.95); /* רקע כהה עם שקיפות */
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     text-align: center;
     width: 90%;
     max-width: 600px;
     animation: fadeIn 1s ease-in-out;
 }
 
-/* ✅ עיצוב הכותרת */
+/* ✅ כותרת ראשית */
 h1 {
     font-size: 2.5rem;
-    color: #222; /* שחור כהה */
+    color: #FFD700; /* זהב */
     font-weight: bold;
     text-align: center;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* ✅ שורת הפרדה */
+/* ✅ פס הפרדה */
 .separator {
     height: 2px;
     background-color: gold;
@@ -48,51 +48,56 @@ h1 {
     margin: auto;
     display: block;
     border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4); /* הצללה */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    border: 3px solid gold;
 }
 
-/* ✅ עיצוב הטקסט מתחת לתמונה */
+/* ✅ עיצוב טקסט */
 p {
     font-size: 1.2rem;
-    color: #444;
+    color: #EEE; /* טקסט בהיר */
     margin-top: 15px;
 }
 
-/* ✅ כפתורים */
-button {
-    padding: 15px;
-    font-size: 1.3rem;
-    margin-top: 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, background 0.3s;
-    width: 100%;
-    font-weight: bold;
-    background: #0056b3; /* כחול כהה */
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-button:hover {
-    background: #003d82; /* שינוי צבע בהובר */
-    transform: scale(1.05);
-}
-
-/* ✅ כפתור מציאת קלפי */
+/* ✅ עיצוב כפתור למציאת קלפי */
 .find-btn {
     background-color: #0056b3;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, background 0.3s;
 }
 
-.find-btn i {
-    font-size: 1.5rem;
+.find-btn:hover {
+    background: #003d82;
+    transform: scale(1.05);
 }
 
 /* ✅ כפתורי ניווט */
+.google-btn,
+.waze-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, background 0.3s;
+    margin-top: 10px;
+}
+
 .google-btn {
     background-color: #4285F4;
 }
