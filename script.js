@@ -34,7 +34,7 @@ function getCurrentPosition() {
 
 async function fetchPollingStations() {
     try {
-        const response = await fetch('https://golan-ser.github.io/polling_locator/polling_stations_with_coordinates.json', {
+        const response = await fetch('polling_stations_updated.json', {
             headers: { 'Cache-Control': 'no-cache' }
         });
 
@@ -61,12 +61,16 @@ function findClosestStation(lat, lng, stations) {
     let shortestDistance = Infinity;
 
     stations.forEach(station => {
-        if (!station.latitude || !station.longitude) {
+        // וידוא שהקואורדינטות הן מספרים
+        let stationLat = parseFloat(station.latitude);
+        let stationLng = parseFloat(station.longitude);
+
+        if (isNaN(stationLat) || isNaN(stationLng)) {
             console.warn("⚠️ קלפי עם נתונים חסרים:", station);
             return;
         }
 
-        const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
+        const distance = calculateDistance(lat, lng, stationLat, stationLng);
         console.log(`📍 מרחק לקלפי "${station["כתובת מלאה"]}": ${distance.toFixed(2)} ק"מ`);
 
         if (distance < shortestDistance) {
@@ -79,7 +83,7 @@ function findClosestStation(lat, lng, stations) {
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
+    const R = 6371; // רדיוס כדור הארץ בק"מ
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -90,14 +94,4 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 function displayResult(station) {
-    if (!station) {
-        document.getElementById('result').innerHTML = `<p>❌ לא נמצאה קלפי קרובה.</p>`;
-        return;
-    }
-
-    document.getElementById('result').innerHTML = `
-        <p>✅ הקלפי הקרובה ביותר אליך היא: <strong>${station["כתובת מלאה"]}</strong></p>
-        <button class="google-btn" onclick="openGoogleMaps(${station.latitude}, ${station.longitude})">ניווט עם Google Maps</button>
-        <button class="waze-btn" onclick="openWaze(${station.latitude}, ${station.longitude})">ניווט עם Waze</button>
-    `;
-}
+    if (!station || !station["כתובת מלאה"]) 
