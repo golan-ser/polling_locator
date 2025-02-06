@@ -9,25 +9,34 @@
 <body>
     <div class="container">
         <h1>מציאת קלפי קרובה לבחירות מעלה יוסף</h1>
+        <div class="separator"></div>
+
+        <!-- תמונת הקמפיין -->
         <div class="campaign-banner">
             <img src="shimon.jpg" alt="קמפיין שמעון">
         </div>
+
         <p>לחץ על הכפתור כדי למצוא את הקלפי הקרובה אליך:</p>
-        <button id="findPollingBtn">
+        
+        <!-- כפתור למציאת קלפי -->
+        <button id="findPollingBtn" onclick="findNearestPollingStation()">
             <span>🔍 מצא קלפי קרובה</span>
         </button>
+
+        <!-- תוצאה -->
         <div id="result">
             <p class="polling-info"></p>
-            <div id="navigation-buttons" class="hidden">
-                <button class="nav-btn" id="googleMapsBtn">
+            <div id="navigation-logos" class="hidden">
+                <a id="googleMapsLink" target="_blank">
                     <img src="Google-Maps.jpg" alt="Google Maps">
-                </button>
-                <button class="nav-btn" id="wazeBtn">
+                </a>
+                <a id="wazeLink" target="_blank">
                     <img src="waze.jpg" alt="Waze">
-                </button>
+                </a>
             </div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
