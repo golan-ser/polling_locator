@@ -39,19 +39,34 @@
                 <img src="waze.jpg" alt="Waze">
             </a>
         </div>
+    </div>
 
-        <div class="separator"></div>
+    <!-- הפרדה בין החלק הראשון לטבלה -->
+    <div class="separator large-separator"></div>
 
-        <!-- טבלת רשימת הקלפיות -->
+    <!-- טבלת רשימת הקלפיות הארצית -->
+    <div class="container">
         <h2>🔹 רשימת הקלפיות הארצית</h2>
+
         <div class="filters">
+            <label for="regionFilter">בחר אזור:</label>
+            <select id="regionFilter">
+                <option value="all">כל האזורים</option>
+                <option value="צפון">צפון</option>
+                <option value="מרכז">מרכז</option>
+                <option value="דרום">דרום</option>
+                <option value="חיפה">חיפה</option>
+                <option value="ירושלים">ירושלים</option>
+                <option value="תל אביב">תל אביב</option>
+            </select>
             <input type="text" id="searchBox" placeholder="🔍 חפש לפי עיר או כתובת...">
         </div>
-        
+
         <table id="pollingTable">
             <thead>
                 <tr>
-                    <th>עיר</th>
+                    <th>אזור</th>
+                    <th>רשות מקומית</th>
                     <th>כתובת</th>
                     <th>ניווט</th>
                 </tr>
