@@ -1,54 +1,67 @@
+/* ✅ עיצוב כללי */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    color: #333;
-    background: url('https://raw.githubusercontent.com/golan-ser/polling_locator/main/background.jpg') no-repeat center center fixed;
+    color: #222; /* טקסט שחור כהה */
+    background: url('background.jpg') no-repeat center center fixed;
     background-size: cover;
-    filter: brightness(0.8);
-}
-
-.container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    text-align: center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    width: 80%;
-    max-width: 600px;
-    margin: 50px auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 100vh;
 }
 
+/* ✅ עיצוב התיבה המרכזית */
+.container {
+    background: rgba(255, 255, 255, 0.9); /* רקע שקוף עדין */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* ✅ עיצוב הכותרת */
 h1 {
     font-size: 2.5rem;
-    color: #FFD700;
+    color: #222; /* שחור כהה */
     font-weight: bold;
     text-align: center;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    border-bottom: 2px solid #FFD700;
-    padding-bottom: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* ✅ שורת הפרדה */
+.separator {
+    height: 2px;
+    background-color: gold;
+    margin: 10px auto 20px auto;
+    width: 80%;
+}
+
+/* ✅ עיצוב תמונת הקמפיין */
 .campaign-banner {
     width: 100%;
-    height: auto;
-    max-width: 100%;
+    max-width: 500px;
     margin: auto;
     display: block;
     border-radius: 10px;
-    background: url('https://golan-ser.github.io/polling_locator/shimon.jpg') no-repeat center center;
-    background-size: contain;
-    height: 250px;
-    border: 3px solid #FFD700;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4); /* הצללה */
 }
 
+/* ✅ עיצוב הטקסט מתחת לתמונה */
+p {
+    font-size: 1.2rem;
+    color: #444;
+    margin-top: 15px;
+}
+
+/* ✅ כפתורים */
 button {
-    padding: 20px;
-    font-size: 1.5rem;
+    padding: 15px;
+    font-size: 1.3rem;
     margin-top: 20px;
     border: none;
     border-radius: 10px;
@@ -56,34 +69,54 @@ button {
     transition: transform 0.2s ease-in-out, background 0.3s;
     width: 100%;
     font-weight: bold;
-    background: #007bff;
+    background: #0056b3; /* כחול כהה */
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
-    background: #0056b3;
+    background: #003d82; /* שינוי צבע בהובר */
     transform: scale(1.05);
 }
 
+/* ✅ כפתור מציאת קלפי */
+.find-btn {
+    background-color: #0056b3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.find-btn i {
+    font-size: 1.5rem;
+}
+
+/* ✅ כפתורי ניווט */
 .google-btn {
     background-color: #4285F4;
-    color: white;
-    width: 100%;
-    margin-top: 10px;
+}
+
+.waze-btn {
+    background-color: #00bcd4;
 }
 
 .google-btn:hover {
     background-color: #357ae8;
 }
 
-.waze-btn {
-    background-color: #00bcd4;
-    color: white;
-    width: 100%;
-    margin-top: 10px;
-}
-
 .waze-btn:hover {
     background-color: #0097a7;
+}
+
+/* ✅ אנימציית טעינה */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
