@@ -47,10 +47,12 @@ function findClosestStation(lat, lng, stations) {
     let closestStation = null;
     let shortestDistance = Infinity;
     stations.forEach(station => {
-        const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
-        if (distance < shortestDistance) {
-            shortestDistance = distance;
-            closestStation = station;
+        if (station.latitude && station.longitude) {
+            const distance = calculateDistance(lat, lng, station.latitude, station.longitude);
+            if (distance < shortestDistance) {
+                shortestDistance = distance;
+                closestStation = station;
+            }
         }
     });
     return closestStation;
@@ -109,23 +111,45 @@ async function loadPollingStations() {
 
 function renderTable(data) {
     const tableBody = document.querySelector("#pollingTable tbody");
+    const regionFilter = document.getElementById("regionFilter");
+    const searchBox = document.getElementById("searchBox");
+
     tableBody.innerHTML = "";
-    
+
     data.forEach(station => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${station["שם הרשות"] || "לא זמין"}</td>
-            <td>${station["כתובת מלאה"] || "לא זמין"}</td>
-            <td>${station["אזור"] || "לא זמין"}</td>
+            <td class="polling-city">${station["שם הרשות"] || "לא זמין"}</td>
+            <td class="polling-address">${station["כתובת מלאה"] || "לא זמין"}</td>
+            <td class="polling-region">${station["אזור"] || "לא זמין"}</td>
             <td>
                 <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
-                    <img src="Google-Maps.jpg" alt="Google Maps" width="60" height="60">
+                    <img src="Google-Maps.jpg" alt="Google Maps" width="40">
                 </a> |
                 <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
-                    <img src="waze.jpg" alt="Waze" width="60" height="60">
+                    <img src="waze.jpg" alt="Waze" width="40">
                 </a>
             </td>
         `;
         tableBody.appendChild(row);
     });
+
+    regionFilter.addEventListener("change", () => filterAndRender(data));
+    searchBox.addEventListener("input", () => filterAndRender(data));
+}
+
+function filterAndRender(data) {
+    const selectedRegion = document.getElementById("regionFilter").value;
+    const searchText = document.getElementById("searchBox").value.toLowerCase();
+    const tableBody = document.querySelector("#pollingTable tbody");
+
+    const filteredStations = data.filter(station => {
+        const matchesRegion = selectedRegion === "all" || station["אזור"] === selectedRegion;
+        const matchesSearch = station["שם הרשות"].toLowerCase().includes(searchText) ||
+                              station["כתובת מלאה"].toLowerCase().includes(searchText);
+        return matchesRegion && matchesSearch;
+    });
+
+    tableBody.innerHTML = "";
+    renderTable(filteredStations);
 }
