@@ -106,45 +106,11 @@ async function loadPollingStations() {
     }
     renderTable(pollingStations);
 }
-async function loadPollingStations() {
-    const pollingStations = await fetchPollingStations();
-    if (pollingStations.length === 0) {
-        console.warn("⚠️ אין קלפיות להצגה.");
-        return;
-    }
-    renderTable(pollingStations);
-}
 
 function renderTable(data) {
     const tableBody = document.querySelector("#pollingTable tbody");
-    if (!tableBody) {
-        console.error("⚠️ אלמנט 'pollingTable' לא נמצא!");
-        return;
-    }
-
-    tableBody.innerHTML = ""; // איפוס הטבלה לפני מילוי נתונים חדשים
-
-    data.forEach(station => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${station["שם הרשות"] || "לא זמין"}</td>
-            <td>${station["כתובת מלאה"] || "לא זמין"}</td>
-            <td>${station["אזור"] || "לא זמין"}</td>
-            <td>
-                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
-                    <img src="Google-Maps.jpg" alt="Google Maps" width="50" height="50">
-                </a> |
-                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
-                    <img src="waze.jpg" alt="Waze" width="50" height="50">
-                </a>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-
     tableBody.innerHTML = "";
+    
     data.forEach(station => {
         const row = document.createElement("tr");
         row.innerHTML = `
