@@ -15,14 +15,14 @@ body {
     backdrop-filter: blur(10px);
     border-radius: 15px;
     padding: 30px;
-    width: 60%;
+    width: 70%; /* הגדלת הרוחב */
     margin: 30px auto;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* כותרות */
 h1 {
-    font-size: 34px;
+    font-size: 36px;
     font-weight: 900;
     color: #D4AF37;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
@@ -30,10 +30,10 @@ h1 {
 
 /* טקסט הקלפי הקרובה ביותר */
 .polling-info {
-    font-size: 24px; /* הגדלת גודל הפונט */
+    font-size: 26px;
     font-weight: bold;
-    color: #FFD700; /* צהוב זהב */
-    font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif; /* גופן יוקרתי */
+    color: #FFD700;
+    font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;
     text-align: center;
     margin-top: 20px;
 }
@@ -44,19 +44,18 @@ h1 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 600px; /* מגביל את הרוחב */
-    margin: 0 auto; /* מרכז את התמונה */
-    padding: 10px;
+    max-width: 800px; /* הגדלת הרוחב */
+    margin: 0 auto;
+    padding: 15px;
 }
 
 .campaign-banner img {
     max-width: 100%;
     height: auto;
-    border-radius: 10px;
-    border: 3px solid #D4AF37;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border: 4px solid #D4AF37;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
 }
-
 
 /* כפתורים */
 button {
@@ -64,7 +63,7 @@ button {
     color: #D4AF37;
     padding: 14px 26px;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -109,10 +108,14 @@ tr:nth-child(even) {
     align-items: center;
     gap: 20px;
     margin-top: 10px;
+    background: rgba(10, 37, 64, 0.8); /* יצירת אפקט זכוכית */
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .navigation-logos img {
-    width: 50px;
+    width: 60px; /* הגדלת הלוגואים */
     height: auto;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
