@@ -1,7 +1,7 @@
 document.getElementById("findPollingBtn").addEventListener("click", findNearestPollingStation);
-
 async function findNearestPollingStation() {
     try {
+        console.log("🟢 הכפתור נלחץ. מנסה להשיג מיקום...");
         const position = await getCurrentPosition();
         console.log("📍 מיקום נוכחי:", position.coords.latitude, position.coords.longitude);
 
@@ -14,21 +14,56 @@ async function findNearestPollingStation() {
         displayResult(nearest);
     } catch (error) {
         console.error("⚠️ שגיאה:", error);
-        document.getElementById('result').innerHTML = `<p style="color: red;">❌ ${error.message}</p>`;
+        document.getElementById('result').innerHTML = `
+            <p style="color: red;">❌ ${error.message}</p>
+            <p>🔍 לא הצלחנו להשיג את המיקום שלך. נסה <a href="#" onclick="manualLocationSearch()">לחפש ידנית</a>.</p>
+        `;
+    }
+}
+document.getElementById("findPollingBtn").addEventListener("click", async () => {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = `<p style="color: blue;">⏳ מחפש את הקלפי הקרובה ביותר... אנא המתן.</p>`;
+    await findNearestPollingStation();
+});
+
+
+function manualLocationSearch() {
+    const userLocation = prompt("🔍 הקלד את שם העיר שלך:");
+    if (userLocation) {
+        console.log("🔍 חיפוש קלפי לפי עיר:", userLocation);
+        document.getElementById('result').innerHTML = `<p>🔍 מחפש קלפי קרובה ל<strong>${userLocation}</strong>...</p>`;
+        // ניתן לחפש לפי שם העיר אם יש לך רשימת כתובות ב-JSON
     }
 }
 
 function getCurrentPosition() {
     return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-            reject(new Error("שירותי מיקום לא זמינים בדפדפן"));
+            reject(new Error("❌ שירותי מיקום אינם נתמכים בדפדפן שלך."));
         } else {
-            navigator.geolocation.getCurrentPosition(resolve, error => {
-                reject(new Error("גישה למיקום נדחתה, אנא אפשר הרשאה בדפדפן"));
-            });
+            navigator.geolocation.getCurrentPosition(
+                resolve,
+                error => {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            reject(new Error("❌ גישה למיקום נדחתה. אפשר הרשאות בדפדפן."));
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            reject(new Error("❌ מידע על המיקום אינו זמין."));
+                            break;
+                        case error.TIMEOUT:
+                            reject(new Error("⏳ הבקשה לקבלת מיקום נמשכה זמן רב מדי."));
+                            break;
+                        default:
+                            reject(new Error("❌ שגיאה לא ידועה בגישה למיקום."));
+                    }
+                },
+                { timeout: 10000 } // מגבלת זמן של 10 שניות
+            );
         }
     });
 }
+
 
 // 📌 כאן עדכן את ה-URL לפי הפתרון המתאים לך!
 const jsonUrl = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
