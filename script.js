@@ -25,21 +25,14 @@ function getCurrentPosition() {
 
 async function fetchPollingStations() {
     try {
-        const url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
-        console.log("🔄 מנסה למשוך נתונים מתוך:", url);
-        
-        const response = await fetch(url, { headers: { 'Cache-Control': 'no-cache' } });
-
+        const response = await fetch('polling_stations_updated.json', { headers: { 'Cache-Control': 'no-cache' } });
         if (!response.ok) {
-            throw new Error(`❌ שגיאה בטעינת JSON: ${response.status}`);
+            throw new Error(`שגיאה בטעינת הנתונים: ${response.status}`);
         }
-
-        const data = await response.json();
-        return Array.isArray(data) ? data : [];
+        return await response.json();
     } catch (error) {
-        console.error("⚠️ שגיאה בטעינת JSON:", error);
-        document.getElementById('result').innerHTML = "<p style='color:red;'>❌ שגיאה בטעינת רשימת הקלפיות.</p>";
-        return [];
+        console.error("שגיאה בטעינת קובץ הקלפיות:", error);
+        document.getElementById('result').innerHTML = "<p style='color:red;'>שגיאה בטעינת נתוני הקלפיות.</p>";
     }
 }
 
@@ -57,6 +50,38 @@ function findClosestStation(lat, lng, stations) {
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+function displayResult(station) {
+    const resultDiv = document.getElementById('result');
+    const navigationLogos = document.getElementById('navigation-logos');
+    
+    if (station) {
+        resultDiv.innerHTML = `
+            <p class="polling-info">📍 הקלפי הקרובה ביותר אליך: ${station["כתובת מלאה"]}</p>
+        `;
+
+        if (station.latitude && station.longitude) {
+            document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+            document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
+            navigationLogos.classList.remove("hidden");
+        } else {
+            resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
+        }
+    } else {
+        resultDiv.innerHTML = `<p style="color:red;">❌ לא נמצאה קלפי קרובה.</p>`;
+    }
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // רדיוס כדור הארץ בק"מ
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -66,7 +91,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c; // התוצאה בקילומטרים
 }
-
 function displayResult(station) {
     const resultDiv = document.getElementById('result');
     const navigationLogos = document.getElementById('navigation-logos');
@@ -76,18 +100,33 @@ function displayResult(station) {
         return;
     }
 
+    // הוספת עיצוב יוקרתי והפיכת כל הטקסט לצהוב
     resultDiv.innerHTML = `
-        <p class="polling-info">📍 הקלפי הקרובה ביותר אליך: ${station["כתובת מלאה"] || "לא זמין"}</p>
+        <div style="font-size: 24px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif; margin-bottom: 10px;">
+            📍 הקלפי הקרובה ביותר אליך:
+        </div>
+        <p style="font-size: 22px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+            ${station["כתובת מלאה"] || "לא זמין"}
+        </p>
+        <p style="font-size: 20px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+            אזור: ${station["אזור"] || "לא זמין"} 📌
+        </p>
     `;
 
     if (station.latitude && station.longitude) {
-        if (document.getElementById("googleMapsLink") && document.getElementById("wazeLink")) {
-            document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
-            document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
-        }
+        document.getElementById("googleMapsLink").href = `https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}`;
+        document.getElementById("wazeLink").href = `https://waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes`;
 
         if (navigationLogos) {
             navigationLogos.classList.remove("hidden");
+
+            // הגדלת הלוגואים ל-60px
+            document.getElementById("googleMapsLink").innerHTML = `
+                <img src="Google-Maps.jpg" alt="Google Maps" width="60" height="60">
+            `;
+            document.getElementById("wazeLink").innerHTML = `
+                <img src="waze.jpg" alt="Waze" width="60" height="60">
+            `;
         } else {
             console.warn("⚠️ אלמנט 'navigation-logos' לא נמצא, לא ניתן להציג קישורים לניווט.");
         }
@@ -95,62 +134,69 @@ function displayResult(station) {
         resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
     }
 }
-
 document.addEventListener("DOMContentLoaded", loadPollingStations);
-let pollingStations = [];
 
-// שליפת הנתונים מה-JSON
-async function fetchData() {
+async function fetchPollingStations() {
     try {
-        const response = await fetch("https://raw.githubusercontent.com/golan-ser/polling_locator/refs/heads/main/polling_stations_updated.json");
-        pollingStations = await response.json();
-        renderTable(pollingStations);
+        const url = "https://golan-ser.github.io/polling_locator/polling_stations_updated.json";
+        console.log("🔄 מנסה למשוך נתונים מתוך:", url);
+        
+        const response = await fetch(url, { headers: { 'Cache-Control': 'no-cache' } });
+
+        if (!response.ok) {
+            throw new Error(`❌ שגיאה בטעינת JSON: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("✅ נתונים נטענו בהצלחה:", data);
+        return data;
     } catch (error) {
-        console.error("❌ שגיאה בטעינת הנתונים:", error);
+        console.error("⚠️ שגיאה בטעינת JSON:", error);
+        document.getElementById('pollingTable').innerHTML = "<p style='color:red;'>❌ שגיאה בטעינת רשימת הקלפיות.</p>";
+        return [];
     }
 }
 
-// פונקציה להצגת הנתונים בטבלה
+async function loadPollingStations() {
+    const pollingStations = await fetchPollingStations();
+    if (pollingStations.length === 0) {
+        console.warn("⚠️ אין קלפיות להצגה.");
+        return;
+    }
+    renderTable(pollingStations);
+}
+
 function renderTable(data) {
     const tableBody = document.getElementById("tableBody");
-    tableBody.innerHTML = "";
+    if (!tableBody) {
+        console.error("⚠️ אלמנט 'tableBody' לא נמצא!");
+        return;
+    }
 
+    tableBody.innerHTML = ""; // איפוס הטבלה
     data.forEach(station => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${station["שם הרשות"] || "לא זמין"}</td>
-            <td>${station["כתובת מלאה"] || "לא זמין"}</td>
-            <td>${station["אזור"] || "לא זמין"}</td>
+            <td style="font-size: 18px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+                ${station["שם הרשות"] || "לא זמין"}
+            </td>
+            <td style="font-size: 18px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+                ${station["כתובת מלאה"] || "לא זמין"}
+            </td>
+            <td style="font-size: 18px; font-weight: bold; color: #FFD700; font-family: 'Frank Ruhl Libre', 'David Libre', 'Noto Serif Hebrew', serif;">
+                ${station["אזור"] || "לא זמין"}
+            </td>
             <td>
-                ${station.latitude && station.longitude 
-                    ? `<a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">מפות</a> |
-                       <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">וייז</a>` 
-                    : "לא זמין"}
+                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
+                    <img src="Google-Maps.jpg" alt="Google Maps" width="60" height="60">
+                </a> |
+                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
+                    <img src="waze.jpg" alt="Waze" width="60" height="60">
+                </a>
             </td>
         `;
         tableBody.appendChild(row);
     });
 }
 
-// פונקציות לסינון וחיפוש
-function filterTable() {
-    const region = document.getElementById("regionFilter").value;
-    const searchTerm = document.getElementById("searchBox").value.trim();
-
-    const filteredData = pollingStations.filter(station => {
-        const matchesRegion = region === "all" || station["אזור"] === region;
-        const matchesSearch = searchTerm === "" ||
-            station["שם הרשות"].includes(searchTerm) ||
-            station["כתובת מלאה"].includes(searchTerm);
-        return matchesRegion && matchesSearch;
-    });
-
-    renderTable(filteredData);
-}
-
-// האזנה לשינויים בסינון
-document.getElementById("regionFilter").addEventListener("change", filterTable);
-document.getElementById("searchBox").addEventListener("input", filterTable);
-
-// טעינת הנתונים כשנפתח העמוד
-fetchData();
+});
