@@ -197,6 +197,4 @@ function renderTable(data) {
         `;
         tableBody.appendChild(row);
     });
-}
 
-});
