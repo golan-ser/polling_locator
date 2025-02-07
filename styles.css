@@ -69,54 +69,32 @@ button:hover {
     background: linear-gradient(135deg, #061a2d, #020d18);
     transform: scale(1.05);
 }
-
-/* טבלת הקלפיות */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background: rgba(255, 255, 255, 0.1);
+body { 
+    font-family: Arial, sans-serif; 
+    direction: rtl; 
+    text-align: right; 
 }
-
-th, td {
-    padding: 12px;
-    border: 1px solid #D4AF37;
-    text-align: center;
-    color: white;
+.container { 
+    width: 80%; 
+    margin: auto; 
 }
-
-th {
-    background: #D4AF37;
-    color: black;
-    font-weight: bold;
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 20px; 
 }
-
-tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.1);
+th, td { 
+    border: 1px solid #ddd; 
+    padding: 8px; 
+    text-align: right; 
 }
-
-/* לוגואים של ניווט */
-.navigation-logos {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 15px;
+th { 
+    background-color: #f4f4f4; 
 }
-
-.navigation-logos img {
-    width: 60px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
+.filters { 
+    margin-bottom: 20px; 
 }
-
-.navigation-logos img:hover {
-    transform: scale(1.1);
-}
-
-/* הפרדה בין החלקים */
-.separator {
-    width: 80%;
-    height: 5px;
-    background-color: #D4AF37;
-    margin: 50px auto;
+input, select { 
+    padding: 8px; 
+    margin-left: 10px; 
 }

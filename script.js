@@ -97,24 +97,24 @@ function displayResult(station) {
 }
 
 document.addEventListener("DOMContentLoaded", loadPollingStations);
+let pollingStations = [];
 
-async function loadPollingStations() {
-    const pollingStations = await fetchPollingStations();
-    if (pollingStations.length === 0) {
-        console.warn("⚠️ אין קלפיות להצגה.");
-        return;
+// שליפת הנתונים מה-JSON
+async function fetchData() {
+    try {
+        const response = await fetch("https://raw.githubusercontent.com/golan-ser/polling_locator/refs/heads/main/polling_stations_updated.json");
+        pollingStations = await response.json();
+        renderTable(pollingStations);
+    } catch (error) {
+        console.error("❌ שגיאה בטעינת הנתונים:", error);
     }
-    renderTable(pollingStations);
 }
 
+// פונקציה להצגת הנתונים בטבלה
 function renderTable(data) {
     const tableBody = document.getElementById("tableBody");
-    if (!tableBody) {
-        console.error("⚠️ אלמנט 'tableBody' לא נמצא!");
-        return;
-    }
-
     tableBody.innerHTML = "";
+
     data.forEach(station => {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -122,10 +122,35 @@ function renderTable(data) {
             <td>${station["כתובת מלאה"] || "לא זמין"}</td>
             <td>${station["אזור"] || "לא זמין"}</td>
             <td>
-                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">מפות</a> |
-                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">וייז</a>
+                ${station.latitude && station.longitude 
+                    ? `<a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">מפות</a> |
+                       <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">וייז</a>` 
+                    : "לא זמין"}
             </td>
         `;
         tableBody.appendChild(row);
     });
 }
+
+// פונקציות לסינון וחיפוש
+function filterTable() {
+    const region = document.getElementById("regionFilter").value;
+    const searchTerm = document.getElementById("searchBox").value.trim();
+
+    const filteredData = pollingStations.filter(station => {
+        const matchesRegion = region === "all" || station["אזור"] === region;
+        const matchesSearch = searchTerm === "" ||
+            station["שם הרשות"].includes(searchTerm) ||
+            station["כתובת מלאה"].includes(searchTerm);
+        return matchesRegion && matchesSearch;
+    });
+
+    renderTable(filteredData);
+}
+
+// האזנה לשינויים בסינון
+document.getElementById("regionFilter").addEventListener("change", filterTable);
+document.getElementById("searchBox").addEventListener("input", filterTable);
+
+// טעינת הנתונים כשנפתח העמוד
+fetchData();
