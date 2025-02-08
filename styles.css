@@ -9,13 +9,13 @@ body {
     direction: rtl;
 }
 
-/* קונטיינר */
+/* קונטיינר כללי */
 #result, .container {
     background: rgba(10, 37, 64, 0.9);
     backdrop-filter: blur(10px);
     border-radius: 15px;
     padding: 30px;
-    width: 70%; /* הגדלת הרוחב */
+    width: 70%;
     margin: 30px auto;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
 }
@@ -44,7 +44,7 @@ h1 {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 800px; /* הגדלת הרוחב */
+    max-width: 800px;
     margin: 0 auto;
     padding: 15px;
 }
@@ -57,7 +57,7 @@ h1 {
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* כפתורים */
+/* כפתור מציאת קלפי */
 button {
     background: linear-gradient(135deg, #0A2540, #061a2d);
     color: #D4AF37;
@@ -76,46 +76,38 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* טבלת הקלפיות - התאמה למובייל מבלי לפגוע בעיצוב */
-.polling-table-container {
-    width: 100%;
-    overflow-x: auto;
-    max-width: 100%;
-    display: block;
-}
-
+/* טבלת הקלפיות */
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 th, td {
     padding: 12px;
+    border: 1px solid #D4AF37;
     text-align: center;
-    font-size: 18px;
+    color: white;
 }
 
-/* התאמה למובייל עם שמירה על עיצוב השורות */
-@media screen and (max-width: 768px) {
-    th, td {
-        padding: 10px;
-        font-size: 16px;
-        white-space: normal; /* מונע חיתוך טקסט */
-    }
-    .polling-table-container {
-        overflow-x: auto;
-    }
-    table {
-        display: table;
-    }
-    tr {
-        display: table-row;
-    }
-    td {
-        display: table-cell;
-        text-align: center;
-    }
+th {
+    background: #D4AF37;
+    color: black;
+    font-weight: bold;
+}
+
+/* עיצוב מחודש לשם הרשות */
+td.polling-city {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* שיפור צבעים לרשימה */
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* לוגואים של ניווט */
@@ -127,8 +119,9 @@ th, td {
     margin-top: 10px;
 }
 
+/* עיצוב כפתורי ניווט */
 .navigation-button {
-    background: rgba(10, 37, 64, 0.8); /* אפקט זכוכית לכל כפתור */
+    background: rgba(10, 37, 64, 0.8);
     padding: 15px;
     border-radius: 12px;
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
@@ -142,8 +135,9 @@ th, td {
     transform: scale(1.1);
 }
 
+/* התאמת גודל לוגואים */
 .navigation-logos img {
-    width: 60px;
+    width: 65px;
     height: auto;
     cursor: pointer;
 }
@@ -154,4 +148,36 @@ th, td {
     height: 5px;
     background-color: #D4AF37;
     margin: 50px auto;
+}
+
+/* סינון לפי אזור */
+.filters {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+#regionFilter, #searchBox {
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 18px;
+    border: 2px solid #D4AF37;
+}
+
+/* סידור השדות בטבלה */
+.polling-region {
+    font-weight: bold;
+    color: #FFD700;
+}
+
+.polling-address {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* אפקט מעבר */
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
