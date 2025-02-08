@@ -23,10 +23,39 @@ body {
 
 /* כותרות */
 h1 {
-    font-size: 36px;
+    font-size: 34px;
     font-weight: 900;
     color: #D4AF37;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* תמונת הקמפיין */
+.campaign-banner img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 10px;
+    display: block;
+    margin: 10px auto;
+}
+
+/* כפתורים */
+button {
+    background: linear-gradient(135deg, #0A2540, #061a2d);
+    color: #D4AF37;
+    padding: 14px 26px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 2px solid #D4AF37;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #061a2d, #020d18);
+    transform: scale(1.05);
 }
 
 /* טבלת הקלפיות */
