@@ -96,8 +96,7 @@ function displayResult(station) {
     } else {
         resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
     }
-}
-document.addEventListener("DOMContentLoaded", function () {
+}document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.querySelector("#pollingTable tbody");
     const regionFilter = document.getElementById("regionFilter");
     const searchBox = document.getElementById("searchBox");
@@ -122,35 +121,36 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
             console.error("⚠️ שגיאה בטעינת רשימת הקלפיות:", error);
             document.getElementById('result').innerHTML = `<p style="color:red;">❌ שגיאה בטעינת רשימת הקלפיות.</p>`;
-        }function renderTable(data) {
-    const tableBody = document.querySelector("#pollingTable tbody");
-    tableBody.innerHTML = ""; 
+        } 
+    } // ← כאן הוספתי את הסוגר החסר
 
-    data.forEach(station => {
-        console.log("📌 בדיקת נתונים:", station); // בדוק אילו נתונים מתקבלים
+    function renderTable(data) {
+        const tableBody = document.querySelector("#pollingTable tbody");
+        tableBody.innerHTML = ""; 
 
-        // שינוי השם מהישן לחדש
-        let cityName = station["רשות מקומית"] || station["שם  הרשות"] || "⚠️ לא ידוע";
-        let address = station["כתובת מלאה"] || station["כתובת הקלפי"] || "⚠️ לא ידוע";
-        let region = station["אזור"] || "⚠️ לא ידוע";
+        data.forEach(station => {
+            console.log("📌 בדיקת נתונים:", station);
 
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td class="polling-city">${cityName}</td>
-            <td class="polling-address">${address}</td>
-            <td class="polling-region">${region}</td>
-            <td>
-                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
-                    <img src="Google-Maps.jpg" alt="Google Maps" width="50">
-                </a> |
-                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
-                    <img src="waze.jpg" alt="Waze" width="50">
-                </a>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
+            let cityName = station["רשות מקומית"] || station["שם  הרשות"] || "⚠️ לא ידוע";
+            let address = station["כתובת מלאה"] || station["כתובת הקלפי"] || "⚠️ לא ידוע";
+            let region = station["אזור"] || "⚠️ לא ידוע";
 
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td class="polling-city">${cityName}</td>
+                <td class="polling-address">${address}</td>
+                <td class="polling-region">${region}</td>
+                <td>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
+                        <img src="Google-Maps.jpg" alt="Google Maps" width="50">
+                    </a> |
+                    <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
+                        <img src="waze.jpg" alt="Waze" width="50">
+                    </a>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
     }
 
     function filterAndRender(pollingStations) {
