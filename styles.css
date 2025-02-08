@@ -116,13 +116,20 @@ td {
     
     /* התאמת עיצוב הכתובת כך שלא תסתיר */
     td.polling-address {
-        text-align: right;
+        text-align: center;
         display: block;
         max-width: 250px;
         overflow-wrap: break-word;
         white-space: normal;
+        line-height: 1.6;
     }
-
+    
+    /* התאמת צבע הטקסט להדגשה */
+    td.polling-address, td.polling-region {
+        color: #FFD700 !important;
+        font-weight: bold;
+    }
+    
     /* התאמת מרכזיות הטבלה */
     .table-wrapper {
         margin: 0 auto;
