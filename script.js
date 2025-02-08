@@ -97,59 +97,69 @@ function displayResult(station) {
         resultDiv.innerHTML += `<p style="color:red;">❌ לא נמצאו קואורדינטות.</p>`;
     }
 }
-
-document.addEventListener("DOMContentLoaded", loadPollingStations);
-
-async function loadPollingStations() {
-    const pollingStations = await fetchPollingStations();
-    if (pollingStations.length === 0) {
-        console.warn("⚠️ אין קלפיות להצגה.");
-        return;
-    }
-    renderTable(pollingStations);
-}
-
-function renderTable(data) {
+document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.querySelector("#pollingTable tbody");
     const regionFilter = document.getElementById("regionFilter");
     const searchBox = document.getElementById("searchBox");
 
-    tableBody.innerHTML = "";
+    async function loadPollingStations() {
+        try {
+            const response = await fetch("https://golan-ser.github.io/polling_locator/polling_stations_updated.json");
+            
+            if (!response.ok) {
+                throw new Error(`שגיאה בטעינת JSON: ${response.status}`);
+            }
 
-    data.forEach(station => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td class="polling-city">${station["שם הרשות"] || "לא זמין"}</td>
-            <td class="polling-address">${station["כתובת מלאה"] || "לא זמין"}</td>
-            <td class="polling-region">${station["אזור"] || "לא זמין"}</td>
-            <td>
-                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
-                    <img src="Google-Maps.jpg" alt="Google Maps" width="40">
-                </a> |
-                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
-                    <img src="waze.jpg" alt="Waze" width="40">
-                </a>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
+            const pollingStations = await response.json();
+            console.log("✅ נתוני הקלפיות נטענו בהצלחה!", pollingStations);
 
-    regionFilter.addEventListener("change", () => filterAndRender(data));
-    searchBox.addEventListener("input", () => filterAndRender(data));
-}
+            // הצגת הטבלה עם כל הנתונים
+            renderTable(pollingStations);
 
-function filterAndRender(data) {
-    const selectedRegion = document.getElementById("regionFilter").value;
-    const searchText = document.getElementById("searchBox").value.toLowerCase();
-    const tableBody = document.querySelector("#pollingTable tbody");
+            // חיבור אירועים לסינון
+            regionFilter.addEventListener("change", () => filterAndRender(pollingStations));
+            searchBox.addEventListener("input", () => filterAndRender(pollingStations));
+        } catch (error) {
+            console.error("⚠️ שגיאה בטעינת רשימת הקלפיות:", error);
+            document.getElementById('result').innerHTML = `<p style="color:red;">❌ שגיאה בטעינת רשימת הקלפיות.</p>`;
+        }
+    }
 
-    const filteredStations = data.filter(station => {
-        const matchesRegion = selectedRegion === "all" || station["אזור"] === selectedRegion;
-        const matchesSearch = station["שם הרשות"].toLowerCase().includes(searchText) ||
-                              station["כתובת מלאה"].toLowerCase().includes(searchText);
-        return matchesRegion && matchesSearch;
-    });
+    function renderTable(data) {
+        tableBody.innerHTML = "";
+        data.forEach(station => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td class="polling-city">${station["רשות מקומית"] || "לא ידוע"}</td>
+                <td class="polling-address">${station["כתובת מלאה"] || "לא ידוע"}</td>
+                <td class="polling-region">${station["אזור"] || "לא ידוע"}</td>
+                <td>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
+                        <img src="Google-Maps.jpg" alt="Google Maps" width="50">
+                    </a> |
+                    <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
+                        <img src="waze.jpg" alt="Waze" width="50">
+                    </a>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
 
-    tableBody.innerHTML = "";
-    renderTable(filteredStations);
-}
+    function filterAndRender(pollingStations) {
+        const selectedRegion = regionFilter.value;
+        const searchText = searchBox.value.toLowerCase();
+
+        const filteredStations = pollingStations.filter(station => {
+            const matchesRegion = selectedRegion === "all" || station["אזור"] === selectedRegion;
+            const matchesSearch = (station["רשות מקומית"] || "").toLowerCase().includes(searchText) ||
+                                  (station["כתובת מלאה"] || "").toLowerCase().includes(searchText);
+            return matchesRegion && matchesSearch;
+        });
+
+        renderTable(filteredStations);
+    }
+
+    // טוען את הנתונים כשהדף נטען
+    loadPollingStations();
+});
