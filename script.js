@@ -124,26 +124,35 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('result').innerHTML = `<p style="color:red;">❌ שגיאה בטעינת רשימת הקלפיות.</p>`;
         }
     }
+function renderTable(data) {
+    const tableBody = document.querySelector("#pollingTable tbody");
+    tableBody.innerHTML = "";
 
-    function renderTable(data) {
-        tableBody.innerHTML = "";
-        data.forEach(station => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td class="polling-city">${station["שם הרשות"] || "⚠️ לא ידוע"}</td>
-                <td class="polling-address">${station["כתובת מלאה"] || "⚠️ לא ידוע"}</td>
-                <td class="polling-region">${station["אזור"] || "⚠️ לא ידוע"}</td>
-                <td>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
-                        <img src="Google-Maps.jpg" alt="Google Maps" width="50">
-                    </a> |
-                    <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
-                        <img src="waze.jpg" alt="Waze" width="50">
-                    </a>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
+    data.forEach(station => {
+        console.log("📌 בדיקת תחנה:", station); // הצגת הנתונים שנכנסים לטבלה
+
+        // שימוש במפתחות כפי שהם מופיעים ב-JSON
+        let cityName = station["שם הרשות"] || "⚠️ לא ידוע";
+        let address = station["כתובת מלאה"] || station["כתובת קלפי"] || "⚠️ לא ידוע";
+        let region = station["אזור"] || "⚠️ לא ידוע";
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td class="polling-city">${cityName}</td>
+            <td class="polling-address">${address}</td>
+            <td class="polling-region">${region}</td>
+            <td>
+                <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
+                    <img src="Google-Maps.jpg" alt="Google Maps" width="50">
+                </a> |
+                <a href="https://www.waze.com/ul?ll=${station.latitude},${station.longitude}&navigate=yes" target="_blank">
+                    <img src="waze.jpg" alt="Waze" width="50">
+                </a>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
     }
 
     function filterAndRender(pollingStations) {
