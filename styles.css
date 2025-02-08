@@ -76,59 +76,45 @@ button:hover {
     transform: scale(1.05);
 }
 
-/* טבלת הקלפיות - רספונסיבית */
+/* טבלת הקלפיות - התאמה למובייל מבלי לפגוע בעיצוב */
 .polling-table-container {
     width: 100%;
-    overflow-x: auto; /* גלילה אופקית במקרה הצורך */
+    overflow-x: auto;
+    max-width: 100%;
+    display: block;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 th, td {
-    padding: 10px;
+    padding: 12px;
     text-align: center;
-    font-size: 18px; /* גודל גופן רגיל */
+    font-size: 18px;
 }
 
-/* התאמה למובייל */
+/* התאמה למובייל עם שמירה על עיצוב השורות */
 @media screen and (max-width: 768px) {
     th, td {
-        padding: 8px;
-        font-size: 16px; /* מקטין את הפונט */
-    }
-
-    .polling-table-container {
-        display: block;
-        overflow-x: auto;
-        width: 100%;
-    }
-
-    table {
-        display: block;
-        white-space: nowrap; /* מונע שבירת מילים */
-    }
-
-    tr {
-        display: flex;
-        flex-direction: column;
-        border-bottom: 2px solid #D4AF37;
         padding: 10px;
+        font-size: 16px;
+        white-space: normal; /* מונע חיתוך טקסט */
     }
-
+    .polling-table-container {
+        overflow-x: auto;
+    }
+    table {
+        display: table;
+    }
+    tr {
+        display: table-row;
+    }
     td {
-        display: block;
-        text-align: right;
-        border-bottom: none;
-    }
-
-    td:before {
-        content: attr(data-label); /* מוסיף שם לעמודה */
-        font-weight: bold;
-        display: block;
-        color: #FFD700;
+        display: table-cell;
+        text-align: center;
     }
 }
 
@@ -157,7 +143,7 @@ th, td {
 }
 
 .navigation-logos img {
-    width: 60px; /* הגדלת הלוגואים */
+    width: 60px;
     height: auto;
     cursor: pointer;
 }
