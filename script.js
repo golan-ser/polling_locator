@@ -123,17 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("⚠️ שגיאה בטעינת רשימת הקלפיות:", error);
             document.getElementById('result').innerHTML = `<p style="color:red;">❌ שגיאה בטעינת רשימת הקלפיות.</p>`;
         }
-    }
-function renderTable(data) {
+    }function renderTable(data) {
     const tableBody = document.querySelector("#pollingTable tbody");
     tableBody.innerHTML = "";
 
     data.forEach(station => {
-        console.log("📌 בדיקת תחנה:", station); // הצגת הנתונים שנכנסים לטבלה
+        console.log("📌 בדיקת נתונים:", station); // בדיקה בקונסול
 
-        // שימוש במפתחות כפי שהם מופיעים ב-JSON
-        let cityName = station["שם הרשות"] || "⚠️ לא ידוע";
-        let address = station["כתובת מלאה"] || station["כתובת קלפי"] || "⚠️ לא ידוע";
+        // קריאה לשדות הנכונים בהתאם לנתונים ב-JSON
+        let cityName = station["שם הרשות"] || "⚠️ לא ידוע"; 
+        let address = station["כתובת מלאה"] || station["כתובת הקלפי"] || "⚠️ לא ידוע";
         let region = station["אזור"] || "⚠️ לא ידוע";
 
         const row = document.createElement("tr");
