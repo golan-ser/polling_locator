@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const pollingStations = await response.json();
-            console.log("✅ נתוני הקלפיות נטענו בהצלחה!", pollingStations);
+            console.log("✅ נתוני הקלפיות שהתקבלו:", pollingStations);
 
             // הצגת הטבלה עם כל הנתונים
             renderTable(pollingStations);
@@ -130,9 +130,9 @@ document.addEventListener("DOMContentLoaded", function () {
         data.forEach(station => {
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td class="polling-city">${station["רשות מקומית"] || "לא ידוע"}</td>
-                <td class="polling-address">${station["כתובת מלאה"] || "לא ידוע"}</td>
-                <td class="polling-region">${station["אזור"] || "לא ידוע"}</td>
+                <td class="polling-city">${station["שם הרשות"] || "⚠️ לא ידוע"}</td>
+                <td class="polling-address">${station["כתובת מלאה"] || "⚠️ לא ידוע"}</td>
+                <td class="polling-region">${station["אזור"] || "⚠️ לא ידוע"}</td>
                 <td>
                     <a href="https://www.google.com/maps/search/?api=1&query=${station.latitude},${station.longitude}" target="_blank">
                         <img src="Google-Maps.jpg" alt="Google Maps" width="50">
@@ -152,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const filteredStations = pollingStations.filter(station => {
             const matchesRegion = selectedRegion === "all" || station["אזור"] === selectedRegion;
-            const matchesSearch = (station["רשות מקומית"] || "").toLowerCase().includes(searchText) ||
+            const matchesSearch = (station["שם הרשות"] || "").toLowerCase().includes(searchText) ||
                                   (station["כתובת מלאה"] || "").toLowerCase().includes(searchText);
             return matchesRegion && matchesSearch;
         });
