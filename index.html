@@ -18,10 +18,10 @@
         <button id="findPollingBtn">🔍 מצא קלפי קרובה</button>
         <div id="result"></div>
         <div class="navigation-logos">
-            <a id="googleMapsLink" target="_blank">
+            <a id="googleMapsLink" class="navigation-button" target="_blank">
                 <img src="Google-Maps.jpg" alt="Google Maps">
             </a>
-            <a id="wazeLink" target="_blank">
+            <a id="wazeLink" class="navigation-button" target="_blank">
                 <img src="waze.jpg" alt="Waze">
             </a>
         </div>
@@ -42,17 +42,20 @@
             </select>
             <input type="text" id="searchBox" placeholder="חפש לפי עיר או כתובת...">
         </div>
-        <table id="pollingTable">
-            <thead>
-                <tr>
-                    <th class="polling-city">רשות מקומית</th>
-                    <th class="polling-address">כתובת</th>
-                    <th class="polling-region">אזור</th>
-                    <th class="polling-navigation">ניווט</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        
+        <div class="polling-table-container">
+            <table id="pollingTable">
+                <thead>
+                    <tr>
+                        <th class="polling-city">רשות מקומית</th>
+                        <th class="polling-address">כתובת</th>
+                        <th class="polling-region">אזור</th>
+                        <th class="polling-navigation">ניווט</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
