@@ -122,16 +122,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
             console.error("⚠️ שגיאה בטעינת רשימת הקלפיות:", error);
             document.getElementById('result').innerHTML = `<p style="color:red;">❌ שגיאה בטעינת רשימת הקלפיות.</p>`;
-        }
-    }function renderTable(data) {
+        }function renderTable(data) {
     const tableBody = document.querySelector("#pollingTable tbody");
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = ""; 
 
     data.forEach(station => {
-        console.log("📌 בדיקת נתונים:", station); // בדיקה בקונסול
+        console.log("📌 בדיקת נתונים:", station); // בדוק אילו נתונים מתקבלים
 
-        // קריאה לשדות הנכונים בהתאם לנתונים ב-JSON
-        let cityName = station["שם הרשות"] || "⚠️ לא ידוע"; 
+        // שינוי השם מהישן לחדש
+        let cityName = station["רשות מקומית"] || station["שם  הרשות"] || "⚠️ לא ידוע";
         let address = station["כתובת מלאה"] || station["כתובת הקלפי"] || "⚠️ לא ידוע";
         let region = station["אזור"] || "⚠️ לא ידוע";
 
